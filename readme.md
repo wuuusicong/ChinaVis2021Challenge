@@ -1,6 +1,4 @@
-# ChinaVis2021Challenge
-
-## 主题-大气污染防治分析
+# 主题-大气污染防治分析
 
 [http://www.chinavis.org/2021/challenge.html](http://www.chinavis.org/2021/challenge.html?fileGuid=YGtccWjTXcXqCWdQ)
 
@@ -21,13 +19,11 @@
 * 网上报名截止日期：2021年5月20日。
 * 作品提交截止时间：2021年6月10日中午12点。
 * 评审结果公布日期：2021年7月1日。
-
 ## 数据集:
 
 2013–2018年中国高分辨率大气污染再分析开放数据集
 
 * 数据可视化竞赛数据下载：[http://naq.cicidata.top:10443/chinavis/opendata](http://naq.cicidata.top:10443/chinavis/opendata?fileGuid=YGtccWjTXcXqCWdQ)
-
 ## 数据描述:
 
 ![图片](https://uploader.shimo.im/f/OnqXvuNEvvx2sR4H.png!thumbnail?fileGuid=YGtccWjTXcXqCWdQ)![图片](https://uploader.shimo.im/f/XVdMcPzfQJygeyKY.png!thumbnail?fileGuid=YGtccWjTXcXqCWdQ)
@@ -53,14 +49,13 @@
 * **大气污染预测**：利用可视分析技术，预测大气污染发展趋势、重污染天气预警。
 * **大气环境的改善**：利用可视分析技术，展示大气污染治理过程中的大气环境状况、评估大气污染防治措施。
 * 自选主题，提炼分析需求，设置分析问题，并提供解决方案。
-
 ## 已有的空气质量检测系统
 
 1. 北京空气质量检测[http://zx.bjmemc.com.cn/getAqiList.shtml?timestamp=1619205991807&timestamp=1619270883187](http://zx.bjmemc.com.cn/getAqiList.shtml?timestamp=1619205991807&timestamp=1619270883187&fileGuid=YGtccWjTXcXqCWdQ)
 
-![图片](https://uploader.shimo.im/f/99HDaUTtb5SHNFxs.png!thumbnail?fileGuid=YGtccWjTXcXqCWdQ)
+![图片](https://uploader.shimo.im/f/99s7iOreCE4t7B6C.png!thumbnail?fileGuid=YGtccWjTXcXqCWdQ)![图片](https://uploader.shimo.im/f/99HDaUTtb5SHNFxs.png!thumbnail?fileGuid=YGtccWjTXcXqCWdQ)
 
-![图片](https://uploader.shimo.im/f/99s7iOreCE4t7B6C.png!thumbnail?fileGuid=YGtccWjTXcXqCWdQ)
+
 
 ![图片](https://uploader.shimo.im/f/aTCfLOx9us0aTH91.png!thumbnail?fileGuid=YGtccWjTXcXqCWdQ)
 
