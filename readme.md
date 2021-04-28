@@ -26,9 +26,7 @@
 * 数据可视化竞赛数据下载：[http://naq.cicidata.top:10443/chinavis/opendata](http://naq.cicidata.top:10443/chinavis/opendata?fileGuid=YGtccWjTXcXqCWdQ)
 ## 数据描述:
 
-![图片](https://uploader.shimo.im/f/OnqXvuNEvvx2sR4H.png!thumbnail?fileGuid=YGtccWjTXcXqCWdQ)![图片](https://uploader.shimo.im/f/XVdMcPzfQJygeyKY.png!thumbnail?fileGuid=YGtccWjTXcXqCWdQ)
-
-![图片](https://uploader.shimo.im/f/qrGX7pH3UJfodXqY.png!thumbnail?fileGuid=YGtccWjTXcXqCWdQ)
+https://github.com/wuuusicong/ChinaVis2021Challenge/blob/master/otherDoc/0-%E7%AC%AC%E5%85%AB%E5%B1%8A%E4%B8%AD%E5%9B%BD%E5%8F%AF%E8%A7%86%E5%8C%96%E4%B8%8E%E5%8F%AF%E8%A7%86%E5%88%86%E6%9E%90%E5%A4%A7%E4%BC%9A%EF%BC%88ChinaVis2021%EF%BC%89%E5%A4%A7%E6%B0%94%E6%B1%A1%E6%9F%93%E5%86%8D%E5%88%86%E6%9E%90%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3%20(3).pdf
 
 
 
@@ -53,9 +51,11 @@
 
 1. 北京空气质量检测[http://zx.bjmemc.com.cn/getAqiList.shtml?timestamp=1619205991807&timestamp=1619270883187](http://zx.bjmemc.com.cn/getAqiList.shtml?timestamp=1619205991807&timestamp=1619270883187&fileGuid=YGtccWjTXcXqCWdQ)
 
-![图片](https://uploader.shimo.im/f/99s7iOreCE4t7B6C.png!thumbnail?fileGuid=YGtccWjTXcXqCWdQ)![图片](https://uploader.shimo.im/f/99HDaUTtb5SHNFxs.png!thumbnail?fileGuid=YGtccWjTXcXqCWdQ)
+## Run visSystem
 
+cd /visSystem
 
+npm install
 
-![图片](https://uploader.shimo.im/f/aTCfLOx9us0aTH91.png!thumbnail?fileGuid=YGtccWjTXcXqCWdQ)
+npm run dev
 
