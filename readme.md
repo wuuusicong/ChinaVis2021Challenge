@@ -28,6 +28,8 @@
 
 https://github.com/wuuusicong/ChinaVis2021Challenge/blob/master/otherDoc/0-%E7%AC%AC%E5%85%AB%E5%B1%8A%E4%B8%AD%E5%9B%BD%E5%8F%AF%E8%A7%86%E5%8C%96%E4%B8%8E%E5%8F%AF%E8%A7%86%E5%88%86%E6%9E%90%E5%A4%A7%E4%BC%9A%EF%BC%88ChinaVis2021%EF%BC%89%E5%A4%A7%E6%B0%94%E6%B1%A1%E6%9F%93%E5%86%8D%E5%88%86%E6%9E%90%E6%95%B0%E6%8D%AE%E9%9B%86%E8%AF%B4%E6%98%8E%E6%96%87%E6%A1%A3%20(3).pdf
 
+https://shimo.im/docs/YGtccWjTXcXqCWdQ/ 
+
 
 
 ## 分析主题:
