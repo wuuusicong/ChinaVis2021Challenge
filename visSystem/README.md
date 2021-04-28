@@ -1,6 +1,6 @@
-# visSystem
+# visual analysis for weather pollution
 
-> visual analysis for weather pollution
+> A vue-based visual analysis system for weather pollution based on vue-cli2.0
 
 ## Build Setup
 
