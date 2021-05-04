@@ -12,4 +12,3 @@ for file in os.listdir(dayDir):
     data_file = '../data/dataset-day/' + file
 
 
-
