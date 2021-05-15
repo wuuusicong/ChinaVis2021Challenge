@@ -1,5 +1,8 @@
 import Vue from 'vue'
 import App from './App.vue'
+import mapBoxGl from 'mapbox-gl'
+
+Vue.prototype.$mapboxgl = mapBoxGl
 
 Vue.config.productionTip = false
 

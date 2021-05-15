@@ -9,6 +9,11 @@
   },
   "dependencies": {
     "core-js": "^3.6.5",
+    "d3": "^6.7.0",
+    "d3-fetch": "^2.0.0",
+    "mapbox-gl": "^2.2.0",
+    "popo-vue-panel": "^1.0.1",
+    "popojs": "^1.4.1",
     "vue": "^2.6.11"
   },
   "devDependencies": {
