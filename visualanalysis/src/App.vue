@@ -14,7 +14,7 @@
   // } from 'piling.js';
   import *as P from 'popojs'
   import Panel from 'popo-vue-panel'
-  import SmallMultiples from "./components/sicong/SmallMultiples";
+  import SmallMultiples from "./components/sicong/SmallMultiples_Canvas";
   import *as d3 from "d3"
   export default {
     data(){
@@ -45,7 +45,7 @@
                         // size:true,
                         // enable:true
                         // custom:[{panels:[1]}]
-                        background:'#ccc',
+                        // background:'#ccc',
                         // show:false
                         // id:true
                     },

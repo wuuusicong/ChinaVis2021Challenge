@@ -1,7 +1,7 @@
 <template>
     <div id="svgContainer">
-        <svg id="draw_SM">
-        </svg>
+        <canvas id="draw_SM">
+        </canvas>
     </div>
 </template>
 
@@ -16,10 +16,17 @@
                 let data = await d3.json("china.json")
                 let colNum = 12
                 let rowNum = 6
-                console.log(this.svgSizeData['svgWidth'])
-                let itemSize = this.svgSizeData['svgWidth']/colNum
-                let gridLayoutPos =  this.gridLayout(this.svgSizeData['svgWidth'],this.svgSizeData['svgHeight'])
-               .forEach((item)=>this.drawMap(item[0],item[1],item[2],data))
+                // console.log(this.svgSizeData['svgWidth'])
+                let itemSize = this.svgSizeData['svgWidth']/colNum;
+                let canvas = document.getElementById('draw_SM')
+                console.log(canvas)
+                console.log(123)
+                const ctx = canvas.getContext('2d')
+                // ctx.fillStyle="#FF0000";
+                // ctx.fillRect(0,0,150,75);
+                this.drawCanvasMap(100,data,ctx)
+                // let gridLayoutPos =  this.gridLayout(this.svgSizeData['svgWidth'],this.svgSizeData['svgHeight'])
+                //                          .forEach((item)=>this.drawMap(item[0],item[1],item[2],data))
             },
             gridLayout(width,height){
                 let gridPos = [];
@@ -36,11 +43,32 @@
                 }
                 return gridPos
             },
-            drawMap(x,y,itemSize,data){
+            drawCanvasMap(itemSize=870,data,canvasContext){
+                var projection = d3.geoMercator().fitExtent([
+                    [0, 0],
+                    [1430, itemSize]
+                ], data); // 设置经纬度转换
+
+
+                const path = d3.geoPath()
+                            .projection(projection)
+                            .context(canvasContext);
+                    const features = data.features;
+                    const color = '#3399cc'
+                    features.forEach((element) => {
+                        console.log(element)
+                        canvasContext.beginPath();
+                        canvasContext.fillStyle = color;
+                        canvasContext.fill()
+                        canvasContext.stroke();
+                        path(element);
+                    });
+                console.log("mapCanvas?")
+            },
+            drawSvgMap(x,y,itemSize,data){
                     let svg = d3.select("#draw_SM")
                     let mapG = svg.append('g')
                         .attr("transform", `translate(${x},${y})`);
-
                     // let projection = d3.geoMercator()
                     //     .center([107,31])
                     //     .scale(50)
@@ -48,8 +76,8 @@
                     let projection = d3.geoMercator()
                                         .fitSize([itemSize,itemSize],data)
 
-                    const path = d3.geoPath().projection(projection)
 
+                    const path = d3.geoPath().projection(projection)
                     mapG.selectAll('g')
                         .data(data.features)
                         .enter()
