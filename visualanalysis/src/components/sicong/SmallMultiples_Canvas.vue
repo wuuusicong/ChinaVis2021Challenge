@@ -25,6 +25,8 @@
                 // ctx.fillStyle="#FF0000";
                 // ctx.fillRect(0,0,150,75);
                 this.drawCanvasMap(100,data,ctx)
+                this.drawCanvasMap(400,data,ctx)
+
                 // let gridLayoutPos =  this.gridLayout(this.svgSizeData['svgWidth'],this.svgSizeData['svgHeight'])
                 //                          .forEach((item)=>this.drawMap(item[0],item[1],item[2],data))
             },
@@ -44,15 +46,14 @@
                 return gridPos
             },
             drawCanvasMap(itemSize=870,data,canvasContext){
-                var projection = d3.geoMercator().fitExtent([
-                    [0, 0],
-                    [1430, itemSize]
-                ], data); // 设置经纬度转换
+                let projection = d3.geoMercator()
+                    .fitSize([itemSize,itemSize],data)
 
 
                 const path = d3.geoPath()
                             .projection(projection)
-                            .context(canvasContext);
+                            .context(canvasContext)
+
                     const features = data.features;
                     const color = '#3399cc'
                     features.forEach((element) => {
@@ -60,8 +61,9 @@
                         canvasContext.beginPath();
                         canvasContext.fillStyle = color;
                         canvasContext.fill()
-                        canvasContext.stroke();
                         path(element);
+                        console.log(path)
+                        canvasContext.stroke();
                     });
                 console.log("mapCanvas?")
             },
