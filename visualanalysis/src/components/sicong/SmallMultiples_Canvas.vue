@@ -1,6 +1,6 @@
 <template>
     <div id="svgContainer">
-        <canvas id="draw_SM">
+        <canvas ref="draw_SM" id="draw_SM" width="53" height="100">
         </canvas>
     </div>
 </template>
@@ -18,14 +18,14 @@
                 let rowNum = 6
                 // console.log(this.svgSizeData['svgWidth'])
                 let itemSize = this.svgSizeData['svgWidth']/colNum;
-                let canvas = document.getElementById('draw_SM')
-                console.log(canvas)
-                console.log(123)
+                let canvas = this.$refs.draw_SM
+                // console.log(canvas)
+                
                 const ctx = canvas.getContext('2d')
                 // ctx.fillStyle="#FF0000";
                 // ctx.fillRect(0,0,150,75);
-                this.drawCanvasMap(100,data,ctx)
-                this.drawCanvasMap(400,data,ctx)
+                this.drawCanvasMap(53,data,ctx)
+                // this.drawCanvasMap(400,data,ctx)
 
                 // let gridLayoutPos =  this.gridLayout(this.svgSizeData['svgWidth'],this.svgSizeData['svgHeight'])
                 //                          .forEach((item)=>this.drawMap(item[0],item[1],item[2],data))
@@ -62,7 +62,7 @@
                         canvasContext.fillStyle = color;
                         canvasContext.fill()
                         path(element);
-                        console.log(path)
+                        // console.log(path)
                         canvasContext.stroke();
                     });
                 console.log("mapCanvas?")
@@ -71,10 +71,6 @@
                     let svg = d3.select("#draw_SM")
                     let mapG = svg.append('g')
                         .attr("transform", `translate(${x},${y})`);
-                    // let projection = d3.geoMercator()
-                    //     .center([107,31])
-                    //     .scale(50)
-                    //     .translate([itemSize/2,itemSize/2])
                     let projection = d3.geoMercator()
                                         .fitSize([itemSize,itemSize],data)
 
@@ -111,15 +107,15 @@
             // console.log(d3.select("#draw_SM"))
             // this.drawMap()
             this.loadDataDrawMap()
-            this.drawSvg()
+            // this.drawSvg()
         }
 
     }
 </script>
 
 <style scoped>
-#svgContainer{
+/* #svgContainer{
     width: 100%;
     height: 100%;
-}
+} */
 </style>
