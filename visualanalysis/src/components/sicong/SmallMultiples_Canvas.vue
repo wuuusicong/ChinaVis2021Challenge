@@ -14,6 +14,7 @@
         methods:{
             async loadDataDrawMap(){
                 let data = await d3.json("china.json")
+                console.log(data)
                 let colNum = 12
                 let rowNum = 6
                 // console.log(this.svgSizeData['svgWidth'])
@@ -57,7 +58,6 @@
                     const features = data.features;
                     const color = '#3399cc'
                     features.forEach((element) => {
-                        console.log(element)
                         canvasContext.beginPath();
                         canvasContext.fillStyle = color;
                         canvasContext.fill()

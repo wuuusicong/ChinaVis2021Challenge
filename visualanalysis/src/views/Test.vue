@@ -1,6 +1,6 @@
 <template>
     <div class="container">
-        <div v-for="i in 186 ">
+        <div v-for="i in 3 ">
             <SmallMultiples :mapJsonData="mapJsonData" :svgSizeData="svgSizeData" class="flex-item" />
         </div>
     </div>
@@ -16,7 +16,7 @@
             return {
                 mapJsonData: {},
                 svgSizeData: {
-                    svgHeight: 500,
+                    svgHeight: 500, 
                     svgWidth: 500
                 }
             }
