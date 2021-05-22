@@ -2,7 +2,8 @@ import Mapbox from '@/views/Mapbox'
 import Grid from '@/views/Grid'
 import Test from '@/views/Test'
 import HeatMap from '@/views/HeatMap'
-
+import HeatMapAQILevel from "./views/HeatMapAQILevel";
+import GridAQILevel from "./views/GridAQILevel";
 const routes = [
     {
         path: '/mapbox',
@@ -10,7 +11,7 @@ const routes = [
     },
     {
         path: '/',
-        component: Grid
+        component: GridAQILevel
     },
     {
         path: '/test',
@@ -18,6 +19,10 @@ const routes = [
     },{
         path: '/heatmap',
         component: HeatMap
+    }
+    ,{
+        path: '/heatmapAQI',
+        component: HeatMapAQILevel
     }
 ]
 
