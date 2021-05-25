@@ -3,8 +3,8 @@ import App from './App.vue'
 import mapBoxGl from 'mapbox-gl'
 import VueRouter from 'vue-router'
 import routes from './router'
-import Viser from 'viser-vue'
-Vue.use(Viser)
+import store from './store'
+
 
 Vue.prototype.$mapboxgl = mapBoxGl
 Vue.use(VueRouter)
@@ -15,6 +15,7 @@ const router = new VueRouter({
 })
 
 new Vue({
+  store,
   router,
   render: h => h(App),
 }).$mount('#app')

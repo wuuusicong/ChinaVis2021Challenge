@@ -1,7 +1,8 @@
 <template>
     <div id="layoutContainer">
+        <button @click="changePosition">change</button>
         <panel target="3" title="Panel 3">
-            <div><GridAQILevel :gridWidth="gridWidth" :gridHeight="gridHeight"/></div>
+            <div><GridAQILevel :gridWidth="gridWidth" :gridHeight="gridHeight" :positionChange="positionChange"/></div>
         </panel>
         <!--      <div v-bind:data-popo="popoDataID2">34214213</div>-->
     </div>
@@ -17,7 +18,7 @@
     // import SmallMultiples from "@/components/sicong/SmallMultiples_Canvas";
     import *as d3 from "d3"
     import GridAQILevel from "./GridAQILevel";
-    import GridAQILevel_Canvas from "./GridAQILevel_Canvas";
+    // import GridAQILevel_Canvas from "./GridAQILevel_Canvas";
     export default {
         data(){
             return {
@@ -25,15 +26,23 @@
                 mapJsonData:{},
                 svgSizeData:{},
                 gridWidth:0,
-                gridHeight:0
+                gridHeight:0,
+                positionChange:true
             }
         },
         components:{
-            GridAQILevel_Canvas,
+            // GridAQILevel_Canvas,
             Panel,
             GridAQILevel
         },
+        methods: {
+            changePosition(){
+                this.positionChange = !this.positionChange
+                console.log(this.positionChange)
+            }
+        },
         mounted() {
+            console.log(this.$store)
             d3.json("map.json").then((data)=>{
                 this.mapJsonData = data
             })
