@@ -3,7 +3,7 @@
         <div v-for="item in position" :style="{background:item.month==5?'skyblue':'red',top:item.day*36+'px',left:(item.week*1+1)*47+'px'}" class="map">
             <img :src="pic[item.date]" :alt="item.week" width="47" height="36">
         </div>
-        
+
     </div>
 </template>
 

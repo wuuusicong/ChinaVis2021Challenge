@@ -4,14 +4,19 @@ import Test from '@/views/Test'
 import HeatMap from '@/views/HeatMap'
 import HeatMapAQILevel from "./views/HeatMapAQILevel";
 import GridAQILevel from "./views/GridAQILevel";
+import globalLayout from "./views/globalLayout";
 const routes = [
     {
         path: '/mapbox',
         component: Mapbox
     },
     {
-        path: '/',
+        path: '/GridAQI',
         component: GridAQILevel
+    },
+    {
+        path: '/',
+        component: globalLayout
     },
     {
         path: '/test',
