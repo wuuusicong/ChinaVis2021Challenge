@@ -1,6 +1,10 @@
 <template>
     <div id="layoutContainer">
-        <button @click="changePosition">change</button>
+        <panel target="2" title="Panel 2">
+            <div>
+                <button @click="changePosition">change</button>
+            </div>
+        </panel>
         <panel target="3" title="Panel 3">
             <div><GridAQILevel :gridWidth="gridWidth" :gridHeight="gridHeight" :positionChange="positionChange"/></div>
         </panel>
@@ -23,8 +27,8 @@
         data(){
             return {
                 renderCanvas:false,
-                mapJsonData:{},
-                svgSizeData:{},
+                // mapJsonData:{},
+                // svgSizeData:{},
                 gridWidth:0,
                 gridHeight:0,
                 positionChange:true
@@ -43,9 +47,9 @@
         },
         mounted() {
             console.log(this.$store)
-            d3.json("map.json").then((data)=>{
-                this.mapJsonData = data
-            })
+            // d3.json("map.json").then((data)=>{
+            //     this.mapJsonData = data
+            // })
             this.$nextTick().then(() => {
                 let popo = P.init({
                     container:'layoutContainer',
