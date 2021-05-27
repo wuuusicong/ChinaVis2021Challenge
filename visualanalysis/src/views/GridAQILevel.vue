@@ -70,7 +70,7 @@
                     tmpYears[i][1].forEach((item2) => {
                         let tmp = []
                         tmp[0] = d3.utcSunday.count(d3.utcYear(new Date(item2)), new Date(item2)) * (this
-                            .itemSize) + 200;
+                            .itemSize);
                         tmp[1] = new Date(item2).getUTCDay() * this.itemSize + padding["heightGap"] + yearGap
                         calendarPos.push(tmp)
                     })
