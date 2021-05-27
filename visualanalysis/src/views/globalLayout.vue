@@ -6,9 +6,9 @@
         <div class="main">
             <div class="btn-container">
                 <button @click="changePosition">change</button>
-                <button v-on:click="shuffle" v-bind:style="{zIndex:9999}">shuffle</button>
-                <button v-on:click="calendar" v-bind:style="{zIndex:9999}">calendar</button>
-                <button v-on:click="t_sne" v-bind:style="{zIndex:9999}">t_sne</button>
+                <button v-on:click="shuffle" :style="{zIndex:9999}">shuffle</button>
+                <button v-on:click="calendar" :style="{zIndex:9999}">calendar</button>
+                <button v-on:click="t_sne" :style="{zIndex:9999}">t_sne</button>
             </div>
             <div class="layout" ref="layout">
                 <GridAQILevel :gridWidth="gridWidth" :gridHeight="gridHeight" :posLayout="posLayout" />
@@ -43,10 +43,10 @@
             GridAQILevel
         },
         methods: {
-            // changePosition() {
-            //     this.positionChange = !this.positionChange
-            //     console.log(this.positionChange)
-            // },
+            changePosition() {
+                this.positionChange = !this.positionChange
+                console.log(this.positionChange)
+            },
             shuffle: function () {
                 // console.log("动画？？")
                 let gridPos2 = _.shuffle(this.gridPos2)

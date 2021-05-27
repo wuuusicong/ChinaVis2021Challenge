@@ -16,16 +16,18 @@
     import * as d3 from "d3"
     import * as $ from 'jquery'
     import _ from "loadsh"
-    const pic = []
-    const contexts = require.context('@/assets/heatmapDataAll/', true, /\.jpg$/);
-    contexts.keys().forEach((item, index) => {
-        pic[index] = {}
-        pic[index]["src"] = contexts(item);
-        pic[index]["id"] = 'grid' + index
-    });
     export default {
         name: "GridAQILevel",
         props: ['gridWidth', 'gridHeight', 'positionChange'],
+        // watch: {
+        //     positionChange(newV){
+        //         if(newV == true){
+        //             this.upDateLayout(this.gridPos)
+        //         }else{
+        //             this.upDateLayout(this.calendarPosition)
+        //         }
+        //     }
+        // },
         methods: {
             gridLayout(dataNum, itemSize, width, height, padding = {
                 widthGap: 10,
@@ -71,7 +73,8 @@
             },
             
             upDateLayout(PosData) {
-                this.pic = this.pic.map((item, index) => {
+                
+                this.pic = this.$store.state.pic.map((item, index) => {
                     return {
                         ...item,
                         pos: PosData[index]
@@ -100,17 +103,22 @@
                 this.position.push(srcTmp)
             })
 
-            let gridPos = this.gridLayout(data.length, this.itemSize, this.gridWidth, this.gridHeight)
+            // let timeData = await d3.json("timeAllJson.json")
+            // this.calendarPosition = this.calendarLayout(timeData)
+
+            this.gridPos = this.gridLayout(data.length, this.itemSize, this.gridWidth, this.gridHeight)
             // console.log(12324)
             // console.log(gridPos)
-            this.upDateLayout(gridPos)
+            this.upDateLayout(this.gridPos)
 
         },
         data() {
             return {
                 position: [],
-                pic,
+                pic: '',
                 itemSize: 18,
+                gridPos: '',
+                calendarPosition: '',
                 gridPos2: []
             };
         },
