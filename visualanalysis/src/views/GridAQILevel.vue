@@ -1,124 +1,106 @@
 <template>
     <div class="map-container">
         <transition-group name="sm-trans" tag="div" class="transContainer">
-        <div v-for="item in pic" class="map" :id="item.id" v-bind:key="item.id" v-bind:style="{top:item.pos[1]+'px',left:item.pos[0]+'px'}">
-            <img  :src="item.src" :width="itemSize" :height="itemSize" >
-        </div>
+            <div v-for="item in pic" class="map" :id="item.id" v-bind:key="item.id"
+                v-bind:style="{top:item.pos[1]+'px',left:item.pos[0]+'px'}">
+                <img :src="item.src" :width="itemSize" :height="itemSize">
+            </div>
         </transition-group>
-        <button v-on:click="shuffle" v-bind:style="{zIndex:9999}">shuffle</button>
-        <button v-on:click="calendar" v-bind:style="{zIndex:9999}">calendar</button>
-        <button v-on:click="t_sne" v-bind:style="{zIndex:9999}">t_sne</button>
+        
 
     </div>
 
 </template>
 
 <script>
-    import *as d3 from "d3"
+    import * as d3 from "d3"
     import * as $ from 'jquery'
     import _ from "loadsh"
     const pic = []
     const contexts = require.context('@/assets/heatmapDataAll/', true, /\.jpg$/);
-    contexts.keys().forEach((item,index) => {
+    contexts.keys().forEach((item, index) => {
         pic[index] = {}
         pic[index]["src"] = contexts(item);
-        pic[index]["id"] = 'grid'+index
+        pic[index]["id"] = 'grid' + index
     });
     export default {
         name: "GridAQILevel",
-        props:['gridWidth','gridHeight'],
-        methods:{
-        gridLayout(dataNum,itemSize,width,height,padding={widthGap:10,heightGap:2}){
-            let itemNum = parseInt(width/(itemSize+padding["widthGap"]))
-            let gridPos = []
-            new Array(dataNum).fill('').forEach((item,index)=>{
-                let tmp = []
-                tmp[0] = (index%itemNum)*(itemSize+padding["widthGap"])+padding["widthGap"]/2
-                tmp[1] = (parseInt(index/itemNum))*(itemSize+padding["heightGap"])+padding["heightGap"]
-                gridPos.push(tmp)
-            })
-            return gridPos
-        },
-       calendarLayout(timeData,padding={widthGap:10,heightGap:2}){
-          // let data = await d3.json("timeAllJson.json")
-           console.log(timeData)
-           console.log("年月日")
-           let years = d3.groups(timeData,d=>new Date(d).getUTCFullYear()).reverse()
-           console.log(typeof years)
-           console.log(years)
-           let calendarPos = []
-           let tmpYears = years
-           for(let i in tmpYears){
-               let yearGap = (this.itemSize+2)*7*parseInt(i)+20
-               console.log(yearGap)
-               tmpYears[i][1].forEach((item2)=>{
-                   let tmp = []
-                   console.log(d3.utcYear(new Date(item2)),new Date(item2))
-                   tmp[0] = d3.utcSunday.count(d3.utcYear(new Date(item2)),new Date(item2))*(this.itemSize)+200;
-                   tmp[1] = new Date(item2).getUTCDay()*this.itemSize+padding["heightGap"]+yearGap
-                   calendarPos.push(tmp)
-               })
-           }
-           console.log(calendarPos)
-           return calendarPos
-        },
-        t_sneLayout(data){
-          return data.map((item)=>{
-              return [item[0]*this.gridWidth,item[1]*this.gridHeight,]
-          })
-        },
-        upDateLayout(PosData){
-            this.pic = this.pic.map((item,index)=>{
-                return {
-                    ...item,
-                    pos:PosData[index]
+        props: ['gridWidth', 'gridHeight', 'positionChange'],
+        methods: {
+            gridLayout(dataNum, itemSize, width, height, padding = {
+                widthGap: 10,
+                heightGap: 2
+            }) {
+                let itemNum = parseInt(width / (itemSize + padding["widthGap"]))
+                let gridPos = []
+                new Array(dataNum).fill('').forEach((item, index) => {
+                    let tmp = []
+                    tmp[0] = (index % itemNum) * (itemSize + padding["widthGap"]) + padding["widthGap"] / 2
+                    tmp[1] = (parseInt(index / itemNum)) * (itemSize + padding["heightGap"]) + padding[
+                        "heightGap"]
+                    gridPos.push(tmp)
+                })
+                return gridPos
+            },
+            calendarLayout(timeData, padding = {
+                widthGap: 10,
+                heightGap: 2
+            }) {
+                // let data = await d3.json("timeAllJson.json")
+                console.log(timeData)
+                console.log("年月日")
+                let years = d3.groups(timeData, d => new Date(d).getUTCFullYear()).reverse()
+                console.log(typeof years)
+                console.log(years)
+                let calendarPos = []
+                let tmpYears = years
+                for (let i in tmpYears) {
+                    let yearGap = (this.itemSize + 2) * 7 * parseInt(i) + 20
+                    console.log(yearGap)
+                    tmpYears[i][1].forEach((item2) => {
+                        let tmp = []
+                        console.log(d3.utcYear(new Date(item2)), new Date(item2))
+                        tmp[0] = d3.utcSunday.count(d3.utcYear(new Date(item2)), new Date(item2)) * (this
+                            .itemSize) + 200;
+                        tmp[1] = new Date(item2).getUTCDay() * this.itemSize + padding["heightGap"] + yearGap
+                        calendarPos.push(tmp)
+                    })
                 }
-            })
-        },
-            //手动设置图片的位置
-            // drawSM(gridPos){
-        //     gridPos.forEach((item,index)=>{
-        //         $(`#grid${index}`).css("top",item[1])
-        //         $(`#grid${index}`).css("left",item[0])
-        //     })
-        //     this.gridPos2 = gridPos
-        // },
-            shuffle:function () {
-                // console.log("动画？？")
-                let gridPos2 = _.shuffle(this.gridPos2)
-                this.pic = this.pic.map((item,index)=>{
+                console.log(calendarPos)
+                return calendarPos
+            },
+            
+            upDateLayout(PosData) {
+                this.pic = this.pic.map((item, index) => {
                     return {
                         ...item,
-                        pos:gridPos2[index]
+                        pos: PosData[index]
                     }
                 })
-                // this.drawSM(this.newGridPos)
             },
-            calendar:async function () {
-                let formatDate = d3.utcFormat("%x")
-
-                let timeData = await d3.json("timeAllJson.json")
-                let calendarPos = this.calendarLayout(timeData)
-                this.upDateLayout(calendarPos)
-            },
-            t_sne:async function () {
-
-                let t_sneData = await d3.json("PCA50-t-sne_AQI.json")
-                let t_snePos = this.t_sneLayout(t_sneData)
-                this.upDateLayout(t_snePos)
-            }
+            //手动设置图片的位置
+            // drawSM(gridPos){
+            //     gridPos.forEach((item,index)=>{
+            //         $(`#grid${index}`).css("top",item[1])
+            //         $(`#grid${index}`).css("left",item[0])
+            //     })
+            //     this.gridPos2 = gridPos
+            // },
+            
+            
+            
         },
         async mounted() {
             // console.log(pic)
             // console.log(this.gridWidth)
             //加载图像
             let data = await d3.json("AQIImg.json")
-            data.forEach((item)=>{
+            data.forEach((item) => {
                 let srcTmp = item
                 this.position.push(srcTmp)
             })
 
-            let gridPos = this.gridLayout(data.length,this.itemSize,this.gridWidth,this.gridHeight)
+            let gridPos = this.gridLayout(data.length, this.itemSize, this.gridWidth, this.gridHeight)
             // console.log(12324)
             // console.log(gridPos)
             this.upDateLayout(gridPos)
@@ -128,8 +110,8 @@
             return {
                 position: [],
                 pic,
-                itemSize:18,
-                gridPos2:[]
+                itemSize: 18,
+                gridPos2: []
             };
         },
     }
@@ -143,11 +125,12 @@
         /*flex-wrap: wrap;*/
     }
 
-    .map{
+    .map {
         display: inline-block;
         position: absolute;
     }
-    .sm-trans-move{
+
+    .sm-trans-move {
         transition: transform 1s;
     }
 </style>
