@@ -11,7 +11,7 @@
                 <button v-on:click="t_sne" v-bind:style="{zIndex:9999}">t_sne</button>
             </div>
             <div class="layout" ref="layout">
-                <GridAQILevel :gridWidth="gridWidth" :gridHeight="gridHeight" :positionChange="positionChange" />
+                <GridAQILevel :gridWidth="gridWidth" :gridHeight="gridHeight" :posLayout="posLayout" />
             </div>
         </div>
         <div class="right">
@@ -35,7 +35,7 @@
                 // svgSizeData:{},
                 gridWidth: 0,
                 gridHeight: 0,
-                positionChange: true
+                posLayout:[]
             }
         },
         components: {
@@ -43,10 +43,10 @@
             GridAQILevel
         },
         methods: {
-            changePosition() {
-                this.positionChange = !this.positionChange
-                console.log(this.positionChange)
-            },
+            // changePosition() {
+            //     this.positionChange = !this.positionChange
+            //     console.log(this.positionChange)
+            // },
             shuffle: function () {
                 // console.log("动画？？")
                 let gridPos2 = _.shuffle(this.gridPos2)
@@ -74,6 +74,9 @@
                 return data.map((item) => {
                     return [item[0] * this.gridWidth, item[1] * this.gridHeight, ]
                 })
+            },
+            upDateLayout(PosData) {
+               this.posLayout = PosData
             },
         },
         mounted() {
@@ -158,10 +161,10 @@
     }
 
     .btn-container{
-        height: 50px;
+        height: 200px;
     }
     .layout{
-        height: calc(100% - 50px);
+        height: calc(100% - 200px);
         position: relative;
     }
 </style>
