@@ -1,13 +1,20 @@
 <template>
-    <div class="map-container">
-        <transition-group name="sm-trans" tag="div" class="transContainer">
-            <div v-for="item in pic" class="map" :id="item.id" v-bind:key="item.id"
-                v-bind:style="{top:item.pos[1]+'px',left:item.pos[0]+'px'}">
-                <img :src="item.src" :width="itemSize" :height="itemSize">
-            </div>
-        </transition-group>
-        
+    <div>
+        <div class="btn-container">            
+            <button @click="grid">grid</button>
+            <button @click="shuffle">shuffle</button>
+            <button @click="calendar">calendar</button>
+            <button @click="t_sne">t_sne</button>
+        </div>
 
+        <div class="layout">
+            <transition-group name="sm-trans" tag="div" class="transContainer">
+                <div v-for="item in pic" class="map" :id="item.id" v-bind:key="item.id"
+                    v-bind:style="{top:item.pos[1]+'px',left:item.pos[0]+'px'}">
+                    <img :src="item.src" :width="itemSize" :height="itemSize">
+                </div>
+            </transition-group>
+        </div>
     </div>
 
 </template>
@@ -18,16 +25,17 @@
     import _ from "loadsh"
     export default {
         name: "GridAQILevel",
-        props: ['gridWidth', 'gridHeight', 'positionChange'],
-        // watch: {
-        //     positionChange(newV){
-        //         if(newV == true){
-        //             this.upDateLayout(this.gridPos)
-        //         }else{
-        //             this.upDateLayout(this.calendarPosition)
-        //         }
-        //     }
-        // },
+        props: ['posData', 'gridWidth', 'gridHeight', 'positionChange'],
+        watch: {
+            positionChange(newV) {
+                if (newV == true) {
+                    this.upDateLayout(this.gridPos)
+                } else {
+                    console.log('change')
+                    this.upDateLayout(this.calendarPosition)
+                }
+            }
+        },
         methods: {
             gridLayout(dataNum, itemSize, width, height, padding = {
                 widthGap: 10,
@@ -44,36 +52,59 @@
                 })
                 return gridPos
             },
+
             calendarLayout(timeData, padding = {
                 widthGap: 10,
                 heightGap: 2
             }) {
-                // let data = await d3.json("timeAllJson.json")
-                console.log(timeData)
-                console.log("年月日")
-                let years = d3.groups(timeData, d => new Date(d).getUTCFullYear()).reverse()
-                console.log(typeof years)
-                console.log(years)
+                let tmpYears = d3.groups(timeData, d => new Date(d).getUTCFullYear()).reverse()
                 let calendarPos = []
-                let tmpYears = years
                 for (let i in tmpYears) {
                     let yearGap = (this.itemSize + 2) * 7 * parseInt(i) + 20
-                    console.log(yearGap)
                     tmpYears[i][1].forEach((item2) => {
                         let tmp = []
-                        console.log(d3.utcYear(new Date(item2)), new Date(item2))
                         tmp[0] = d3.utcSunday.count(d3.utcYear(new Date(item2)), new Date(item2)) * (this
-                            .itemSize) + 200;
+                            .itemSize);
                         tmp[1] = new Date(item2).getUTCDay() * this.itemSize + padding["heightGap"] + yearGap
                         calendarPos.push(tmp)
                     })
                 }
-                console.log(calendarPos)
                 return calendarPos
             },
-            
+            grid(){
+                console.log('1')
+            },
+            t_sne: async function () {
+                let t_sneData = await d3.json("PCA50-t-sne_AQI.json")
+                let t_snePos = this.t_sneLayout(t_sneData)
+                this.upDateLayout(t_snePos)
+            },
+            calendar: async function () {
+                let formatDate = d3.utcFormat("%x")
+                let timeData = await d3.json("timeAllJson.json")
+                let calendarPos = this.calendarLayout(timeData)
+                this.upDateLayout(calendarPos)
+            },
+            t_sneLayout(data) {
+                return data.map((item) => {
+                    return [item[0] * this.gridWidth, item[1] * this.gridHeight, ]
+                })
+            },
+
+            shuffle: function () {
+                // console.log("动画？？")
+                let gridPos2 = _.shuffle(this.gridPos2)
+                this.pic = this.pic.map((item, index) => {
+                    return {
+                        ...item,
+                        pos: gridPos2[index]
+                    }
+                })
+                // this.drawSM(this.newGridPos)
+            },
+
             upDateLayout(PosData) {
-                
+                this.PosData
                 this.pic = this.$store.state.pic.map((item, index) => {
                     return {
                         ...item,
@@ -89,9 +120,6 @@
             //     })
             //     this.gridPos2 = gridPos
             // },
-            
-            
-            
         },
         async mounted() {
             // console.log(pic)
@@ -102,21 +130,14 @@
                 let srcTmp = item
                 this.position.push(srcTmp)
             })
-
-            // let timeData = await d3.json("timeAllJson.json")
-            // this.calendarPosition = this.calendarLayout(timeData)
-
             this.gridPos = this.gridLayout(data.length, this.itemSize, this.gridWidth, this.gridHeight)
-            // console.log(12324)
-            // console.log(gridPos)
-            this.upDateLayout(this.gridPos)
-
+            this.upDateLayout(this.gridPos)            
         },
         data() {
             return {
                 position: [],
-                pic: '',
                 itemSize: 18,
+                pic: '',
                 gridPos: '',
                 calendarPosition: '',
                 gridPos2: []
@@ -126,13 +147,6 @@
 </script>
 
 <style scoped>
-    .map-container {
-        /*display: flex;*/
-        /*flex-direction: row;*/
-        width: 100%;
-        /*flex-wrap: wrap;*/
-    }
-
     .map {
         display: inline-block;
         position: absolute;
@@ -140,5 +154,9 @@
 
     .sm-trans-move {
         transition: transform 1s;
+    }
+
+    .btn-container {
+        height: 100px;
     }
 </style>
