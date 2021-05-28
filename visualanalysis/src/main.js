@@ -4,6 +4,7 @@ import mapBoxGl from 'mapbox-gl'
 import VueRouter from 'vue-router'
 import routes from './router'
 import store from './store'
+import vuetify from './plugins/vuetify'
 
 
 Vue.prototype.$mapboxgl = mapBoxGl
@@ -17,5 +18,6 @@ const router = new VueRouter({
 new Vue({
   store,
   router,
-  render: h => h(App),
+  vuetify,
+  render: h => h(App)
 }).$mount('#app')

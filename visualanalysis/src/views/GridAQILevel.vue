@@ -2,10 +2,10 @@
     <div ref="layout">
         <div class="btn-container">
             <span>layout:</span>
-            <button class="btn" @click="grid">grid</button>
-            <button class="btn" @click="shuffle">shuffle</button>
-            <button class="btn" @click="calendar">calendar</button>
-            <button class="btn" @click="t_sne">t_sne</button>
+            <button class="changeLayout" @click="grid">grid</button>
+            <button class="changeLayout" @click="shuffle">shuffle</button>
+            <button class="changeLayout" @click="calendar">calendar</button>
+            <button class="changeLayout" @click="t_sne">t_sne</button>
         </div>
 
         <div class="SmallMultiple">
@@ -152,11 +152,17 @@
         position: relative;
     }
 
-    .btn{
+    .changeLayout{
         display: inline-block;
         width: 70px;
         height: 30px;
+        border: 1px solid #aaa;
+        border-radius: 4px;
         /* padding: 3px 3px; */
         margin: 0px 5px;
+    }
+
+    .changeLayout:hover{
+        background-color: #eee;
     }
 </style>
