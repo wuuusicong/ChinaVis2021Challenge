@@ -7,8 +7,8 @@
             <div class="status-control">
 
             </div>
-            <div class="layout" ref="layout">
-                <GridAQILevel :gridWidth="gridWidth" :gridHeight="gridHeight" :posLayout="posLayout" :positionChange="positionChange"/>
+            <div class="layout">
+                <GridAQILevel/>
             </div>
         </div>
         <div class="right">
@@ -37,14 +37,9 @@
         components: {      
             GridAQILevel
         },
-        methods: {                  
-            upDateLayout(PosData) {
-               this.posLayout = PosData
-            },
-        },
+
         mounted() {                    
-            this.gridWidth = this.$refs.layout.offsetWidth;
-            this.gridHeight = this.$refs.layout.offsetHeight;
+            
         }
     };
 </script>
@@ -65,15 +60,16 @@
 
     .left {
         float: left;
-        width: 200px;
-        height: 100%;
-        background-color: skyblue;
+        width: 199px;
+        height: 100%;        
+        border-right: 1px solid #ddd;
     }
 
     .right {
         float: left;
-        width: 200px;
+        width: 199x;
         height: 100%;
+        border-left: 1px solid #ddd;
         background-color: red
     }
 
@@ -86,7 +82,7 @@
 
     .status-control{
         height: 100px;
-        background-color: yellow;
+        border-bottom: 1px solid #ddd;
     }
 
     .layout{

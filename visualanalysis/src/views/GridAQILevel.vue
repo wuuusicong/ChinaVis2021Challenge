@@ -1,13 +1,14 @@
 <template>
-    <div>
-        <div class="btn-container">            
-            <button @click="grid">grid</button>
-            <button @click="shuffle">shuffle</button>
-            <button @click="calendar">calendar</button>
-            <button @click="t_sne">t_sne</button>
+    <div ref="layout">
+        <div class="btn-container">
+            <span>layout:</span>
+            <button class="btn" @click="grid">grid</button>
+            <button class="btn" @click="shuffle">shuffle</button>
+            <button class="btn" @click="calendar">calendar</button>
+            <button class="btn" @click="t_sne">t_sne</button>
         </div>
 
-        <div class="layout">
+        <div class="SmallMultiple">
             <transition-group name="sm-trans" tag="div" class="transContainer">
                 <div v-for="item in pic" class="map" :id="item.id" v-bind:key="item.id"
                     v-bind:style="{top:item.pos[1]+'px',left:item.pos[0]+'px'}">
@@ -24,18 +25,7 @@
     import * as $ from 'jquery'
     import _ from "loadsh"
     export default {
-        name: "GridAQILevel",
-        props: ['posData', 'gridWidth', 'gridHeight', 'positionChange'],
-        watch: {
-            positionChange(newV) {
-                if (newV == true) {
-                    this.upDateLayout(this.gridPos)
-                } else {
-                    console.log('change')
-                    this.upDateLayout(this.calendarPosition)
-                }
-            }
-        },
+        name: "GridAQILevel",        
         methods: {
             gridLayout(dataNum, itemSize, width, height, padding = {
                 widthGap: 10,
@@ -72,11 +62,13 @@
                 return calendarPos
             },
             grid(){
-                console.log('1')
+                this.upDateLayout(this.gridPos)
             },
             t_sne: async function () {
                 let t_sneData = await d3.json("PCA50-t-sne_AQI.json")
-                let t_snePos = this.t_sneLayout(t_sneData)
+                let t_snePos = t_sneData.map((item) => {
+                    return [item[0] * this.gridWidth, item[1] * this.gridHeight, ]
+                })
                 this.upDateLayout(t_snePos)
             },
             calendar: async function () {
@@ -84,11 +76,6 @@
                 let timeData = await d3.json("timeAllJson.json")
                 let calendarPos = this.calendarLayout(timeData)
                 this.upDateLayout(calendarPos)
-            },
-            t_sneLayout(data) {
-                return data.map((item) => {
-                    return [item[0] * this.gridWidth, item[1] * this.gridHeight, ]
-                })
             },
 
             shuffle: function () {
@@ -121,25 +108,24 @@
             //     this.gridPos2 = gridPos
             // },
         },
-        async mounted() {
-            // console.log(pic)
-            // console.log(this.gridWidth)
-            //加载图像
-            let data = await d3.json("AQIImg.json")
-            data.forEach((item) => {
-                let srcTmp = item
-                this.position.push(srcTmp)
-            })
-            this.gridPos = this.gridLayout(data.length, this.itemSize, this.gridWidth, this.gridHeight)
-            this.upDateLayout(this.gridPos)            
-        },
+        // async mounted() {
+        //     this.gridWidth = this.$refs.layout.offsetWidth;
+        //     this.gridHeight = this.$refs.layout.offsetHeight;
+        //     //加载图像
+        //     let data = await d3.json("AQIImg.json")
+        //     data.forEach((item) => {
+        //         let srcTmp = item
+        //         this.position.push(srcTmp)
+        //     })
+        //     this.gridPos = this.gridLayout(data.length, this.itemSize, this.gridWidth, this.gridHeight)
+        //     this.upDateLayout(this.gridPos)            
+        // },
         data() {
             return {
                 position: [],
                 itemSize: 18,
                 pic: '',
-                gridPos: '',
-                calendarPosition: '',
+                gridPos: '',                
                 gridPos2: []
             };
         },
@@ -157,6 +143,20 @@
     }
 
     .btn-container {
+        box-sizing: border-box;
+        padding: 10px 10px;
         height: 100px;
+    }
+
+    .SmallMultiple{
+        position: relative;
+    }
+
+    .btn{
+        display: inline-block;
+        width: 70px;
+        height: 30px;
+        /* padding: 3px 3px; */
+        margin: 0px 5px;
     }
 </style>
