@@ -92,7 +92,7 @@
 
             upDateLayout(PosData) {
                 this.PosData
-                this.pic = this.$store.state.pic.map((item, index) => {
+                this.$store.state.pic = this.$store.state.pic.map((item, index) => {
                     return {
                         ...item,
                         pos: PosData[index]
