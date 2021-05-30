@@ -5,16 +5,34 @@
         </div>
         <div class="main">
             <div class="status-control">
-                <div class="date-picker">
-                    <v-menu ref="menu1" v-model="menu1" :close-on-content-click="false" transition="scale-transition"
-                        offset-y max-width="290px" min-width="auto">
-                        <template v-slot:activator="{ on, attrs }">
-                            <v-text-field v-model="dateFormatted" persistent-hint
-                                prepend-icon="mdi-calendar" v-bind="attrs" @blur="date = parseDate(dateFormatted)"
-                                v-on="on" class="ma-0"></v-text-field>
-                        </template>
-                        <v-date-picker v-model="date" no-title @input="menu1 = false"></v-date-picker>
-                    </v-menu>
+                <div class="status-control-first">
+                    <div class="date">
+                        <span class="control-category-title">时间：</span>
+                        <DatePicker></DatePicker>
+                        <span style="margin:0px 8px"> -- </span>
+                        <DatePicker></DatePicker>
+                    </div>
+                    <div class="pollution-events">
+                        <span class="control-category-title">污染等级：</span>
+                        <Rating></Rating>
+                    </div>
+                    <div class="pollution-category">
+                        <span class="control-category-title">污染物：</span>
+                        <ul class="pollution-list">
+                            <li class="pollution-item"><input type="radio" name="pollution-item"> pm2.5</li>
+                            <li class="pollution-item"><input type="radio" name="pollution-item"> pm10</li>
+                            <li class="pollution-item"><input type="radio" name="pollution-item"> CO2</li>
+                            <li class="pollution-item"><input type="radio" name="pollution-item"> SO2</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="status-control-second">
+                    <div class="item-slider">
+                        <span class="control-category-title">item-num：</span><v-slider v-model="value"></v-slider>    
+                    </div>
+                    <div class="item-slider">
+                        <span class="control-category-title">item-size：</span><v-slider v-model="value"></v-slider>
+                    </div>            
                 </div>
             </div>
             <div class="layout">
@@ -22,7 +40,7 @@
             </div>
         </div>
         <div class="right">
-
+            dd
         </div>
     </div>
     <!-- <div id="demo"></div> -->
@@ -31,19 +49,21 @@
 <script>
     // import SmallMultiples from "@/components/sicong/SmallMultiples_Canvas";
     import GridAQILevel from "./GridAQILevel";
+    import DatePicker from '@/components/DatePicker'
+    import Rating from '@/components/Rating'
     export default {
         components: {
-            GridAQILevel
+            GridAQILevel,
+            DatePicker,
+            Rating
         },
 
         data() {
             return {
                 renderCanvas: false,
+                value: 0,
                 // mapJsonData:{},
                 // svgSizeData:{},
-                date: new Date().toISOString().substr(0, 10),
-                dateFormatted: this.formatDate(new Date().toISOString().substr(0, 10)),
-                menu1: false,
             }
         },
 
@@ -51,36 +71,11 @@
             computedDateFormatted() {
                 return this.formatDate(this.date)
             },
-        },
-
-        watch: {
-            date(val) {
-                this.dateFormatted = this.formatDate(this.date)
-            },
-        },
-
-        mounted() {
-
-        },
-
-        methods: {
-            formatDate(date) {
-                if (!date) return null
-
-                const [year, month, day] = date.split('-')
-                return `${month}/${day}/${year}`
-            },
-            parseDate(date) {
-                if (!date) return null
-
-                const [month, day, year] = date.split('/')
-                return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
-            },
-        },
+        },        
     };
 </script>
 
-<style>
+<style scoped>
     html,
     body {
         padding: 0;
@@ -103,30 +98,75 @@
 
     .right {
         float: left;
-        width: 199x;
+        width: 249px;
         height: 100%;
         border-left: 1px solid #ddd;
-        background-color: red
     }
 
     .main {
         float: left;
-        width: calc(100% - 400px);
+        width: calc(100% - 450px);
         height: 100%;
         position: relative;
     }
 
-    .status-control {
-        height: 100px;
-        border-bottom: 1px solid #ddd;
+    .control-category-title {
+        display: inline-block;
+        text-align: center;
+        width: 90px;
     }
+
+    .status-control {
+        height: 150px;
+        border-bottom: 1px solid #ddd;
+        background-color: rgb(250, 250, 250);
+    }
+
+    .status-control-first {
+        padding-right: 30px;
+        float: left;
+    }
+
+    .status-control-second {
+        box-sizing: border-box;
+        border-left: 1px solid #ddd;
+        width: 300px;
+        height: 150px;
+        padding-left: 30px;
+        padding-top: 10px;
+        float: left;
+    }
+
+    .status-control .date,
+    .status-control .pollution-events,
+    .pollution-category{
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        height: 50px;
+    }
+
+    .item-slider {
+        display: flex;
+        
+    }
+
+    .pollution-list {
+        display: flex;
+        align-items: center;
+        justify-content: flex-start;
+        list-style: none;
+        padding-left: 0px;
+        height: 50px;
+    }
+
+    .pollution-item {
+        padding: 0px 8px;
+    }
+
 
     .layout {
         height: 100%;
         position: relative;
-    }
-
-    .date-picker{
-        width: 130px;
     }
 </style>
