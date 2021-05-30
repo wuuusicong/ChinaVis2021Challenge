@@ -90,8 +90,7 @@
                 // this.drawSM(this.newGridPos)
             },
 
-            upDateLayout(PosData) {
-                this.PosData
+            upDateLayout(PosData) {                
                 this.pic = this.$store.state.pic.map((item, index) => {
                     return {
                         ...item,
@@ -117,6 +116,7 @@
                 let srcTmp = item
                 this.position.push(srcTmp)
             })
+            console.log('dd')
             this.gridPos = this.gridLayout(data.length, this.itemSize, this.gridWidth, this.gridHeight)
             this.upDateLayout(this.gridPos)            
         },
