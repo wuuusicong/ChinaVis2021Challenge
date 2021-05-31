@@ -2,8 +2,9 @@
     <div class="map-container">
         <transition-group name="sm-trans" tag="div" class="transContainer">
             <div v-for="item in this.$store.state.pic" class="map" :id="item.id" v-bind:key="item.id"
-                v-bind:style="{top:item.pos[1]+'px',left:item.pos[0]+'px'}">
-                <img :src="item.src" :width="itemSize" :height="itemSize" :id="item.imgId">
+                v-bind:style="{top:item.pos[1]+'px',left:item.pos[0]+'px'}"
+                 >
+                <img :src="item.src"  :width="itemSize" :height="itemSize" :id="item.imgId" >
             </div>
         </transition-group>
         
@@ -113,5 +114,8 @@
 
     .sm-trans-move {
         transition: transform 1s;
+    }
+    .itemImg{
+        margin: auto;
     }
 </style>

@@ -1,5 +1,5 @@
 <template>
-    <canvas id="canvasContainer" :width="gridWidth" :height="gridHeight"></canvas>
+    <svg id="canvasContainer" :width="gridWidth" :height="gridHeight"></svg>
 </template>
 
 <script>
@@ -8,7 +8,7 @@
     import _ from "loadsh"
     import {fabric} from "fabric"
     export default {
-        name: "GridAQILevel_can",
+        name: "GridAQILevel_svg",
         props: ['gridWidth', 'gridHeight', 'positionChange'],
         // watch: {
         //     positionChange(newV){
@@ -59,12 +59,12 @@
                                 StaticCanvas.renderAll()
                             }
                         },
-                        duration:2000,
+                        duration:2*index,
                         easing: fabric.util.ease.easeInOutCubic,
                     })
                     item.animate('top',500,{
                         easing: fabric.util.ease.easeInOutCubic,
-                        duration:2000
+                        duration:2*index
                     })
                 })
             },
@@ -104,7 +104,7 @@
             async drawCanvas(pic,StaticCanvas){
                 let that = this;
                 let imageAll = []
-                console.log(pic)
+                console.log(StaticCanvas)
 
                 let proAll = []
                 pic.forEach((item,index)=>{
@@ -114,6 +114,11 @@
                     // console.log(image2)
 
                 })
+                StaticCanvas.selectAll("img_g")
+                .data(pic)
+                .enter()
+                .append("g")
+                .attr("transform",(item)=>`translate(${item["pos"][0]},${item["pos"][1]})`)
                 let results = await Promise.all(proAll)
                 results.forEach((item,index)=>StaticCanvas.add(item))
                 imageAll.push(results)
@@ -169,11 +174,11 @@
                     pos:this.gridPos[index]
                 }
             })
-            let StaticCanvas = new fabric.StaticCanvas('canvasContainer');
+            let StaticCanvas = d3.select("#canvasContainer");
 
             let imageAll =  await this.drawCanvas(newpic,StaticCanvas)
             console.log(imageAll)
-            this.animateCanvas(imageAll,StaticCanvas)
+            // this.animateCanvas(imageAll,StaticCanvas)
 
 
             // console.log(12324)
