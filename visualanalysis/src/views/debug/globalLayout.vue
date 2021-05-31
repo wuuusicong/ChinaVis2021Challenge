@@ -10,7 +10,7 @@
                 <button @click="calendar" :style="{zIndex:9999}">calendar</button>
                 <button @click="t_sne" :style="{zIndex:9999}">t_sne</button>
                 <button @click="t_sne" :style="{zIndex:9999}">lineChart</button>
-                <button @click="t_sne" :style="{zIndex:9999}">tree</button>
+                <button @click="treeLayout" :style="{zIndex:9999}">tree</button>
             </div>
             <div class="layout" ref="layout">
                 <GridAQILevel :gridWidth="gridWidth" :gridHeight="gridHeight" :posLayout="posLayout" />
@@ -67,6 +67,24 @@
                     return [item[0] * this.gridWidth, item[1] * this.gridHeight, ]
                 })
                 this.upDateLayout(t_snePos)
+            },
+            treeLayout: async function (){
+                let tree_Data = await d3.json("treeDataNew.json")
+                console.log(tree_Data)
+                console.log(12345)
+                const treemap = d3.treemap()
+                                .tile(d3.treemapBinary)
+                                .size([this.gridWidth,this.gridHeight])
+                const root = d3.hierarchy(tree_Data).sum(d=>d.AQI);
+                const tree = treemap(root)
+                const leaves = tree.leaves()
+                console.log(leaves)
+                let treePos = []
+                leaves.forEach((item,index)=>{
+                    treePos[item["data"]["index"]] = [item.x0,item.y0]
+                })
+                this.upDateLayout(treePos)
+                // console.log(treemap)
             },
             calendarLayout(timeData,padding = {
                 widthGap: 10,
