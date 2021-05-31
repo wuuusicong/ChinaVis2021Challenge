@@ -107,24 +107,30 @@
                 console.log(StaticCanvas)
 
                 let proAll = []
-                pic.forEach((item,index)=>{
-                    // console.log(1234)
-                    proAll.push(this.loadImage(pic,item,index))
-                    // console.log(12345)
-                    // console.log(image2)
-
-                })
+                // pic.forEach((item,index)=>{
+                //     // console.log(1234)
+                //     proAll.push(this.loadImage(pic,item,index))
+                //     // console.log(12345)
+                //     // console.log(image2)
+                //
+                // })
                 StaticCanvas.selectAll("img_g")
                 .data(pic)
                 .enter()
                 .append("g")
                 .attr("transform",(item)=>`translate(${item["pos"][0]},${item["pos"][1]})`)
-                let results = await Promise.all(proAll)
-                results.forEach((item,index)=>StaticCanvas.add(item))
-                imageAll.push(results)
+                .append("image")
+                .attr("x",0)
+                .attr("y",0)
+                .attr("width",18)
+                .attr("height",18)
+                .attr("xlink:href",(item)=>item.src)
+                // let results = await Promise.all(proAll)
+                // results.forEach((item,index)=>StaticCanvas.add(item))
+                // imageAll.push(results)
                 console.log(555)
-                console.log(results)
-                return results
+                // console.log(results)
+                // return results
                     // if(index>1)return
                     // let imgElement = document.createElement('img')
                     // imgElement.src = item.src;
