@@ -6,27 +6,33 @@
             <button class="changeLayout" @click="shuffle">shuffle</button>
             <button class="changeLayout" @click="calendar">calendar</button>
             <button class="changeLayout" @click="t_sne">t_sne</button>
+            <button class="changeLayout" @click="changeShow">show</button>
         </div>
 
-        <div class="SmallMultiple">
+        <div class="SmallMultiple" v-show="show">
             <transition-group name="sm-trans" tag="div" class="transContainer">
                 <div v-for="item in pic" class="map" :id="item.id" v-bind:key="item.id"
-                    v-bind:style="{top:item.pos[1]+'px',left:item.pos[0]+'px'}">
+                    :style="{top:item.pos[1]+'px',left:item.pos[0]+'px'}">
+                <!-- <div v-for="item in pic" class="map" :id="item.id" v-bind:key="item.id"
+                    :style="{transform:'translate('+item.pos[0]+'px,'+item.pos[1]+'px)'}"> -->
                     <img :src="item.src" :width="itemSize" :height="itemSize">
                 </div>
             </transition-group>
         </div>
     </div>
 
-</template>
+</template> 
 
 <script>
     import * as d3 from "d3"
     import * as $ from 'jquery'
     import _ from "loadsh"
     export default {
-        name: "GridAQILevel",        
+        name: "GridAQILevel",
         methods: {
+            changeShow(){
+                this.show = !this.show
+            },
             gridLayout(dataNum, itemSize, width, height, padding = {
                 widthGap: 10,
                 heightGap: 2
@@ -61,7 +67,7 @@
                 }
                 return calendarPos
             },
-            grid(){
+            grid() {
                 this.upDateLayout(this.gridPos)
             },
             t_sne: async function () {
@@ -90,7 +96,7 @@
                 // this.drawSM(this.newGridPos)
             },
 
-            upDateLayout(PosData) {                
+            upDateLayout(PosData) {
                 this.pic = this.$store.state.pic.map((item, index) => {
                     return {
                         ...item,
@@ -118,14 +124,15 @@
             })
             console.log('dd')
             this.gridPos = this.gridLayout(data.length, this.itemSize, this.gridWidth, this.gridHeight)
-            this.upDateLayout(this.gridPos)            
+            this.upDateLayout(this.gridPos)
         },
         data() {
             return {
+                show: true,
                 position: [],
                 itemSize: 18,
                 pic: '',
-                gridPos: '',                
+                gridPos: '',
                 gridPos2: []
             };
         },
@@ -135,6 +142,8 @@
 <style scoped>
     .map {
         display: inline-block;
+        will-change: top,left;
+        /* transform: translateZ(0); */
         position: absolute;
     }
 
@@ -148,11 +157,11 @@
         height: 100px;
     }
 
-    .SmallMultiple{
+    .SmallMultiple {
         position: relative;
     }
 
-    .changeLayout{
+    .changeLayout {
         display: inline-block;
         width: 70px;
         height: 30px;
@@ -162,7 +171,7 @@
         margin: 0px 5px;
     }
 
-    .changeLayout:hover{
+    .changeLayout:hover {
         background-color: #eee;
     }
 </style>
