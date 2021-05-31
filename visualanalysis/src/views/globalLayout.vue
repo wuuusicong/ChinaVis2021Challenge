@@ -1,7 +1,16 @@
 <template>
     <div id="layoutContainer">
         <div class="left">
-
+            <div class="main-layout-nav">
+                <img :src="grid" alt=""  width="190">
+                <span class="layout-name">Grid</span>
+            </div>
+            <div class="main-layout-nav">
+                <img :src="tree" alt=""  width="190">
+                <span class="layout-name">tree</span>
+            </div>
+            
+            
         </div>
         <div class="main">
             <div class="status-control">
@@ -48,6 +57,8 @@
 
 <script>
     // import SmallMultiples from "@/components/sicong/SmallMultiples_Canvas";
+    import grid from "@/assets/icon/grid.png"
+    import tree from "@/assets/icon/tree.jpg"
     import GridAQILevel from "./GridAQILevel";
     import DatePicker from '@/components/DatePicker'
     import Rating from '@/components/Rating'
@@ -60,6 +71,8 @@
 
         data() {
             return {
+                tree,
+                grid,
                 renderCanvas: false,
                 value: 0,
                 // mapJsonData:{},
@@ -84,6 +97,17 @@
         height: 100%;
     }
 
+    .main-layout-nav{
+        border: 1px solid #ddd;
+        background-color: white;
+        text-align: center;
+        margin: 10px 0px;
+    }
+
+    .main-layout-nav:hover{
+        border-color: #999;
+    }
+
     #layoutContainer {
         width: 100%;
         height: 100%;
@@ -94,6 +118,7 @@
         width: 199px;
         height: 100%;
         border-right: 1px solid #ddd;
+        background-color: rgb(250, 250, 250);
     }
 
     .right {

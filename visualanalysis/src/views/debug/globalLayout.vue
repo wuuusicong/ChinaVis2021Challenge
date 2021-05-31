@@ -190,7 +190,7 @@
     };
 </script>
 
-<style>
+<style scoped>
     html,
     body {
         padding: 0;
