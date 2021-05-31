@@ -1,12 +1,14 @@
 <template>
-    <div ref="layout">
+    <div ref="layout" class="layoutContainer">
         <div class="btn-container">
             <span>layout:</span>
             <button class="changeLayout" @click="grid">grid</button>
-            <button class="changeLayout" @click="shuffle">shuffle</button>
+            <button class="changeLayout" @click="treeLayout">tree</button>
             <button class="changeLayout" @click="calendar">calendar</button>
             <button class="changeLayout" @click="t_sne">t_sne</button>
             <button class="changeLayout" @click="changeShow">show</button>
+            <button class="changeLayout" @click="itemRect">rect</button>
+            <button class="changeLayout" @click="itemMap">Map</button>
         </div>
 
         <div class="SmallMultiple" v-show="show">
@@ -50,6 +52,35 @@
                 })
                 return gridPos
             },
+            treeLayout: async function (){
+                let tree_Data = await d3.json("treeDataNew.json")
+                console.log("tree")
+                console.log(this.$refs.layout.offsetWidth)
+                console.log(this.$refs.layout.offsetHeight)
+                const treemap = d3.treemap()
+                    .tile(d3.treemapBinary)
+                    .size([this.$refs.layout.offsetWidth,this.$refs.layout.offsetHeight])
+                const root = d3.hierarchy(tree_Data).sum(d=>d.AQI);
+                const tree = treemap(root)
+                const leaves = tree.leaves()
+                console.log(leaves)
+                let treePos = []
+                const color = d3.scaleOrdinal(d3.schemeCategory10);
+                leaves.forEach((item,index)=>{
+                    treePos[item["data"]["index"]] = [item.x0,item.y0]
+                    let imgId = '#img'+item["data"]["index"]
+                    let gridId = '#grid'+item["data"]["index"]
+                    let imgSize = d3.min([(item.x1-item.x0),(item.y1-item.y0)])
+                    // console.log($(imgId))
+                    $(imgId).css("width",imgSize)
+                    $(imgId).css("height",imgSize)
+                    $(gridId).css("background",color(item.parent.data.name))
+                    $(gridId).css("width",imgSize)
+                    $(gridId).css("height",imgSize)
+                })
+                this.upDateLayout(treePos)
+                // console.log(treemap)
+            },
 
             calendarLayout(timeData, padding = {
                 widthGap: 10,
@@ -86,16 +117,31 @@
                 this.upDateLayout(calendarPos)
             },
 
-            shuffle: function () {
+            itemRect: function () {
                 // console.log("动画？？")
-                let gridPos2 = _.shuffle(this.gridPos2)
-                this.pic = this.pic.map((item, index) => {
-                    return {
-                        ...item,
-                        pos: gridPos2[index]
-                    }
-                })
+                d3.selectAll("svg>*")
+                    .remove();
+                d3.selectAll("svg")
+                    .append("rect")
+                    .attr("id",(item,index)=>'img'+index)
+                    .attr("width",this.itemSize)
+                    .attr("height",this.itemSize)
+                    .attr("x",0)
+                    attr("y",0)
+
                 // this.drawSM(this.newGridPos)
+            },
+            itemMap:function (){
+                d3.selectAll("svg>*")
+                    .remove();
+                d3.selectAll("svg")
+                    .append("image")
+                    .attr("id",(item,index)=>'img'+index)
+                    .attr("x",0)
+                    .attr("y",0)
+                    .attr("width",this.itemSize)
+                    .attr("height",this.itemSize)
+                    .attr("xlink:href",(item,index)=>this.$store.state.pic[index].src)
             },
 
             upDateLayout(PosData) {
@@ -161,6 +207,11 @@
 
     .SmallMultiple {
         position: relative;
+        height: 100%;
+    }
+    .layoutContainer{
+        width: 100%;
+        height: 100%;
     }
 
     .changeLayout {
@@ -176,4 +227,7 @@
     .changeLayout:hover {
         background-color: #eee;
     }
+    /*#itemRect{*/
+    /*    background: black;*/
+    /*}*/
 </style>

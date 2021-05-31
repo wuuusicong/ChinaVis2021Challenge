@@ -17,7 +17,6 @@
             </div>
         </div>
         <div class="right">
-
         </div>
     </div>
     <!-- <div id="demo"></div> -->
