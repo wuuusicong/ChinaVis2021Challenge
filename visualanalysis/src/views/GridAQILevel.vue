@@ -113,19 +113,19 @@
             //     this.gridPos2 = gridPos
             // },
         },
-        // async mounted() {
-        //     this.gridWidth = this.$refs.layout.offsetWidth;
-        //     this.gridHeight = this.$refs.layout.offsetHeight;
-        //     //加载图像
-        //     let data = await d3.json("AQIImg.json")
-        //     data.forEach((item) => {
-        //         let srcTmp = item
-        //         this.position.push(srcTmp)
-        //     })
-        //     console.log('dd')
-        //     this.gridPos = this.gridLayout(data.length, this.itemSize, this.gridWidth, this.gridHeight)
-        //     this.upDateLayout(this.gridPos)
-        // },
+        async mounted() {
+            this.gridWidth = this.$refs.layout.offsetWidth;
+            this.gridHeight = this.$refs.layout.offsetHeight;
+            //加载图像
+            let data = await d3.json("AQIImg.json")
+            data.forEach((item) => {
+                let srcTmp = item
+                this.position.push(srcTmp)
+            })
+            console.log('dd')
+            this.gridPos = this.gridLayout(data.length, this.itemSize, this.gridWidth, this.gridHeight)
+            this.upDateLayout(this.gridPos)
+        },
         data() {
             return {
                 show: true,

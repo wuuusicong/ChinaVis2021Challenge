@@ -1,11 +1,12 @@
 <template>
     <div class="map-container">
         <transition-group name="sm-trans" tag="div" class="transContainer">
-            <div v-for="item in this.$store.state.pic" class="map" :id="item.id" v-bind:key="item.id"
+            <svg v-for="item in this.$store.state.pic" class="map" :id="item.id" v-bind:key="item.id"
                 v-bind:style="{top:item.pos[1]+'px',left:item.pos[0]+'px'}"
+                 :width="itemSize" :height="itemSize"
                  >
-                <img :src="item.src"  :width="itemSize" :height="itemSize" :id="item.imgId" >
-            </div>
+                <image :xlink:href="item.src"  :width="itemSize" :height="itemSize" :id="item.imgId" />
+            </svg>
         </transition-group>
         
 

@@ -48,59 +48,18 @@
             animateCanvas(imageAll,StaticCanvas,position){
                 console.log(imageAll)
                 console.log(455)
-              // imageAll.forEach((item,index)=>console.log(index))
-                imageAll.forEach((item,index)=>{
-                    console.log(item)
-                    item.animate('left',200,{
-                        onChange:function render(){
-                            console.log("animate??")
-                            if(item.lastAdd){
-                                fabric.util.requestAnimFrame(render)
-                                StaticCanvas.renderAll()
-                            }
-                        },
-                        duration:2*index,
-                        easing: fabric.util.ease.easeInOutCubic,
-                    })
-                    item.animate('top',500,{
-                        easing: fabric.util.ease.easeInOutCubic,
-                        duration:2*index
-                    })
-                })
-            },
-            // var ctx=canvas.getContext("2d")
+               console.log(d3.selectAll(imageAll))
+                d3.selectAll(imageAll)
+                .transition()
+                .duration(2000)
+                .attr("transform",(item)=>`translate(200,100)`)
 
-            // var rect = new fabric.Rect({
-            //     top : item.pos[1],
-            //     left : item.pos[0],
-            //     width : this.itemSize,
-            //     height : this.itemSize,
-            //     fill : 'red'
-            // });
-            // StaticCanvas.add(rect);
-            loadImage(pic,item,index) {
-                let that = this;
-                return new Promise((resolve, reject) => {
+                // .attr("transform",(item)=>`translate(200,100`);
 
-                    let imgObj = new Image()
-                    imgObj.src = item.src;
-                    imgObj.onload = function () {
-                        let image2 = new fabric.Image(imgObj);
-                        image2.set({
-                            top: item.pos[1],
-                            left: item.pos[0],
-                        })
-                        image2.lastAdd = index === (pic.length-1)
-                        // console.log(image2)
-                        image2.scaleToWidth(that.itemSize)
-                        image2.scaleToHeight(that.itemSize)
-                        // image2.filters.push(new fabric.Image.filters.Resize({scaleX: 0.2, scaleY: 0.2}));
-                        // image2.applyFilters(StaticCanvas.renderAll.bind(StaticCanvas));
-                        // StaticCanvas.add(image2);
-                        resolve(image2)
-                    }
-                })
+                // imageAll.forEach((item,index)=>console.log(index))
             },
+
+
             async drawCanvas(pic,StaticCanvas){
                 let that = this;
                 let imageAll = []
@@ -114,23 +73,27 @@
                 //     // console.log(image2)
                 //
                 // })
-                StaticCanvas.selectAll("img_g")
+                let img_gAll = StaticCanvas.selectAll("img_g")
                 .data(pic)
                 .enter()
                 .append("g")
-                .attr("transform",(item)=>`translate(${item["pos"][0]},${item["pos"][1]})`)
-                .append("image")
-                .attr("x",0)
-                .attr("y",0)
-                .attr("width",18)
-                .attr("height",18)
-                .attr("xlink:href",(item)=>item.src)
+                .attr("id",(item)=>item.id)
+                .attr("class","img_g")
+                .attr("transform",(item)=>`translate(${item["pos"][0]},${item["pos"][1]})`);
+                img_gAll
+                    .append("image")
+                    .attr("id",(item)=>item.imgId)
+                    .attr("x",0)
+                    .attr("y",0)
+                    .attr("width",this.itemSize)
+                    .attr("height",this.itemSize)
+                    .attr("xlink:href",(item)=>item.src)
                 // let results = await Promise.all(proAll)
                 // results.forEach((item,index)=>StaticCanvas.add(item))
                 // imageAll.push(results)
                 console.log(555)
                 // console.log(results)
-                // return results
+                return img_gAll
                     // if(index>1)return
                     // let imgElement = document.createElement('img')
                     // imgElement.src = item.src;
@@ -184,7 +147,7 @@
 
             let imageAll =  await this.drawCanvas(newpic,StaticCanvas)
             console.log(imageAll)
-            // this.animateCanvas(imageAll,StaticCanvas)
+            this.animateCanvas(imageAll,StaticCanvas)
 
 
             // console.log(12324)

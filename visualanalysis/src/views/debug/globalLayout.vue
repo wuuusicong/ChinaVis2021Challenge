@@ -13,7 +13,7 @@
                 <button @click="treeLayout" :style="{zIndex:9999}">tree</button>
             </div>
             <div class="layout" ref="layout">
-                <GridAQILevel_svg :gridWidth="gridWidth" :gridHeight="gridHeight" :posLayout="posLayout" />
+                <GridAQILevel :gridWidth="gridWidth" :gridHeight="gridHeight" :posLayout="posLayout" />
             </div>
         </div>
         <div class="right">
