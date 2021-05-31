@@ -11,12 +11,14 @@
 
         <div class="SmallMultiple" v-show="show">
             <transition-group name="sm-trans" tag="div" class="transContainer">
-                <div v-for="item in pic" class="map" :id="item.id" v-bind:key="item.id"
-                    :style="{top:item.pos[1]+'px',left:item.pos[0]+'px'}">
+                <svg v-for="item in pic" class="map" :id="item.id" v-bind:key="item.id"
+                    :style="{top:item.pos[1]+'px',left:item.pos[0]+'px'}"
+                     :width="itemSize" :height="itemSize"
+                >
                 <!-- <div v-for="item in pic" class="map" :id="item.id" v-bind:key="item.id"
                     :style="{transform:'translate('+item.pos[0]+'px,'+item.pos[1]+'px)'}"> -->
-                    <img :src="item.src" :width="itemSize" :height="itemSize">
-                </div>
+                    <image :xlink:href="item.src"  :width="itemSize" :height="itemSize" :id="item.imgId" />
+                </svg>
             </transition-group>
         </div>
     </div>
