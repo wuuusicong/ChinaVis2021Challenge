@@ -13,7 +13,7 @@
                 <button @click="treeLayout" :style="{zIndex:9999}">tree</button>
             </div>
             <div class="layout" ref="layout">
-                <GridAQILevel :gridWidth="gridWidth" :gridHeight="gridHeight" :posLayout="posLayout" />
+                <GridAQILevel_svg :gridWidth="gridWidth" :gridHeight="gridHeight" :posLayout="posLayout" />
             </div>
         </div>
         <div class="right">
@@ -25,9 +25,12 @@
 
 <script>
     import * as P from 'popojs'
+    import $ from "jquery"
     // import SmallMultiples from "@/components/sicong/SmallMultiples_Canvas";
     import * as d3 from "d3"
     import GridAQILevel from "./GridAQILevel";
+    import GridAQILevel_can from "./GridAQILevel_can";
+    import GridAQILevel_svg from "./GridAQILevel_svg";
     // import GridAQILevel_Canvas from "./GridAQILevel_Canvas";
     export default {
         data() {
@@ -42,6 +45,8 @@
             }
         },
         components: {
+            GridAQILevel_svg,
+            GridAQILevel_can,
             // GridAQILevel_Canvas,
             GridAQILevel
         },
@@ -71,7 +76,6 @@
             treeLayout: async function (){
                 let tree_Data = await d3.json("treeDataNew.json")
                 console.log(tree_Data)
-                console.log(12345)
                 const treemap = d3.treemap()
                                 .tile(d3.treemapBinary)
                                 .size([this.gridWidth,this.gridHeight])
@@ -80,8 +84,17 @@
                 const leaves = tree.leaves()
                 console.log(leaves)
                 let treePos = []
+                const color = d3.scaleOrdinal(d3.schemeCategory10);
                 leaves.forEach((item,index)=>{
                     treePos[item["data"]["index"]] = [item.x0,item.y0]
+                    let imgId = '#img'+item["data"]["index"]
+                    let gridId = '#grid'+item["data"]["index"]
+                    let imgSize = d3.min([(item.x1-item.x0),(item.y1-item.y0)])
+                    // console.log($(imgId))
+                    $(imgId).css("width",imgSize)
+                    $(imgId).css("height",imgSize)
+                    $(gridId).css("background",color(item.parent.data.name))
+                    $(gridId).css("border",'#000')
                 })
                 this.upDateLayout(treePos)
                 // console.log(treemap)

@@ -59,12 +59,12 @@
                                 StaticCanvas.renderAll()
                             }
                         },
-                        duration:2000,
+                        duration:2*index,
                         easing: fabric.util.ease.easeInOutCubic,
                     })
                     item.animate('top',500,{
                         easing: fabric.util.ease.easeInOutCubic,
-                        duration:2000
+                        duration:2*index
                     })
                 })
             },
