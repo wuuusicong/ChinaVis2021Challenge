@@ -51,7 +51,7 @@
             </div>
         </div>
         <div class="right">
-            dd
+            <Report></Report>
         </div>
     </div>
     <!-- <div id="demo"></div> -->
@@ -64,11 +64,13 @@
     import GridAQILevel from "./GridAQILevel";
     import DatePicker from '@/components/DatePicker'
     import Rating from '@/components/Rating'
+    import Report from '@/components/Report'
     export default {
         components: {
             GridAQILevel,
             DatePicker,
-            Rating
+            Rating,
+            Report
         },
 
         data() {
