@@ -33,8 +33,6 @@
                     // .attr('fill', function(d, i) {
                     //     return color[i % 10];
                     // })
-
-
             }
         },
         mounted() {

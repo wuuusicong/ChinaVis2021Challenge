@@ -5,7 +5,7 @@
                 v-bind:style="{top:item.pos[1]+'px',left:item.pos[0]+'px'}"
                  :width="itemSize" :height="itemSize"
                  >
-                <image :xlink:href="item.src"  :width="itemSize" :height="itemSize" :id="item.imgId" />
+<!--                <image :xlink:href="item.src"  :width="itemSize" :height="itemSize" :id="item.imgId" />-->
             </svg>
         </transition-group>
         
@@ -65,7 +65,36 @@
             //     this.gridPos2 = gridPos
             // },
             
-            
+            drawMap(mapId,data){
+                let mapG = d3.select(mapId)
+
+                // mapG.append("rect")
+                // console.log(svg)
+                // let mapG = svg.append('g')
+                    // .attr("transform", `translate(${x},${y})`);
+
+                // let projection = d3.geoMercator()
+                //     .center([107,31])
+                //     .scale(50)
+                //     .translate([itemSize/2,itemSize/2])
+                let projection = d3.geoMercator()
+                    .fitSize([this.itemSize,this.itemSize],data)
+
+                const path = d3.geoPath().projection(projection)
+
+                mapG.selectAll('g')
+                    .data(data.features)
+                    .enter()
+                    .append("g")
+                    .append('path')
+                    .attr('d', path)
+                    .attr('stroke', '#272823')
+                    .attr('stroke-width', 1)
+                    .attr('opacity', 0.6)
+                // .attr('fill', function(d, i) {
+                //     return color[i % 10];
+                // })
+            },
             
         },
         async mounted() {
@@ -86,7 +115,17 @@
             // console.log(gridPos)
             this.upDateLayout(this.gridPos)
 
+            let mapData = await d3.json("china.json")
+            data.forEach((item,index) => {
+                let itemID = '#grid'+index
+                // console.log(d3.select(itemID))
+                if(index>600)return
+                this.drawMap(itemID,mapData)
+            })
+
+
         },
+
         data() {
             return {
                 position: [],
@@ -105,6 +144,7 @@
         /*display: flex;*/
         /*flex-direction: row;*/
         width: 100%;
+        height: 100%;
         /*flex-wrap: wrap;*/
     }
 

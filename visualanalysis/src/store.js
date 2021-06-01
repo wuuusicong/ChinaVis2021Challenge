@@ -4,7 +4,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 const pic = []
-const contexts = require.context('@/assets/heatmapDataAll/', true, /\.jpg$/);
+const contexts = require.context('@/assets/heatmapDataAll/', true, /\.png$/);
 contexts.keys().forEach((item, index) => {
   pic[index] = {}
   pic[index]["src"] = contexts(item);

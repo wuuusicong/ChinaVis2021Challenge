@@ -9,7 +9,7 @@
     import * as d3 from "d3";
 
     export default {
-        props:['mapJsonData','svgSizeData'],
+        props:['mapJsonData'],
         name: "SmallMultiples",
         methods:{
             async loadDataDrawMap(){
@@ -76,6 +76,8 @@
             }
         },
         mounted() {
+            let svgSizeData = {"svgHeight":1000,"svgWidth":1000}
+            this.svgSizeData = svgSizeData
             console.log(this.svgSizeData)
             // this.loadMapData()
             // console.log(d3.select("#draw_SM"))

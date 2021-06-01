@@ -29,6 +29,7 @@
                     <span>{{year}}</span>
                 </template>
             </div>
+            <svg id="mainSvg" style='top:0;left: 0'></svg>
             <transition-group name="sm-trans" tag="div" class="transContainer">
                 <svg v-for="item in pic" class="map" :id="item.id" v-bind:key="item.id"
                     :style="{top:item.pos[1]+'px',left:item.pos[0]+'px'}"
@@ -86,10 +87,33 @@
                     .size([this.$refs.layout.offsetWidth,this.$refs.layout.offsetHeight])
                 const root = d3.hierarchy(tree_Data).sum(d=>d.AQI);                
                 const tree = treemap(root)
+                console.log(tree)
+                console.log("node?")
+                //头结点
+                let nodeSvg = $("<svg id='GridNode' class='map' style='top: 0;left: 0;'></svg>")
+                $('.transContainer').append(nodeSvg)
+                $("#GridNode").attr("width",tree["x1"]-tree["x0"])
+                                .attr("height",tree["y1"]-tree["y0"])
+                                .attr("background",'#000')
+
+                tree.children.forEach((item,index)=>{
+                    let itemID = 'GridNode'+index
+                    let node2Svg = $("<svg class='map'></svg>")
+                    node2Svg.id = itemID;
+                    $(itemID).attr("width",item["x1"]-item["x0"])
+                        .attr("height",item["y1"]-item["y0"])
+                        .attr("top",item["y0"])
+                        .attr("left",item["x0"]);
+                    $('.transContainer').append(node2Svg)
+                })
+
                 const leaves = tree.leaves()                
                 let treePos = []
                 const color = d3.scaleOrdinal(d3.schemeCategory10);
+                console.log("tree??")
+                console.log(d3.group(root, d => d.height))
                 if(this.itemType==='rect'){
+                    console.log(leaves)
 
                     leaves.forEach((item,index)=>{
                         treePos[item["data"]["index"]] = [item.x0,item.y0]
@@ -260,6 +284,10 @@
     .SmallMultiple {
         position: relative;
         height: 100%;
+    }
+    #mainSvg{
+        height: 100%;
+        width: 100%;
     }
     .layoutContainer{
         position: relative;
