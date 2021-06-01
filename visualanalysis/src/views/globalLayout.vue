@@ -1,11 +1,11 @@
 <template>
     <div id="layoutContainer">
         <div class="left">
-            <div class="main-layout-nav">
+            <div class="main-layout-nav" @click="changeLayout" data-name="grid">
                 <img :src="grid" alt=""  width="190">
                 <span class="layout-name">Grid</span>
             </div>
-            <div class="main-layout-nav">
+            <div class="main-layout-nav" @click="changeLayout" data-name="tree">
                 <img :src="tree" alt=""  width="190">
                 <span class="layout-name">tree</span>
             </div>
@@ -45,7 +45,7 @@
                 </div>
             </div>
             <div class="layout">
-                <GridAQILevel />
+                <GridAQILevel :layoutCategory="layoutCategory"></GridAQILevel>
             </div>
         </div>
         <div class="right">
@@ -75,11 +75,16 @@
                 grid,
                 renderCanvas: false,
                 value: 0,
-                // mapJsonData:{},
-                // svgSizeData:{},
+                layoutCategory: 'grid'
             }
         },
-
+        methods: {
+            changeLayout(e){
+                let category = e.currentTarget.dataset['name'];
+                console.log(category)
+                this.layoutCategory = category;
+            }
+        },
         computed: {
             computedDateFormatted() {
                 return this.formatDate(this.date)

@@ -1,12 +1,9 @@
 <template>
     <div ref="layout" class="layoutContainer">
         <div class="btn-container">
-            <span>layout:</span>
-            <button class="changeLayout" @click="grid">grid</button>
-            <button class="changeLayout" @click="treeLayout">tree</button>
+            <span>layout:</span>                   
             <button class="changeLayout" @click="calendar">calendar</button>
-            <button class="changeLayout" @click="t_sne">t_sne</button>
-            <button class="changeLayout" @click="changeShow">show</button>
+            <button class="changeLayout" @click="t_sne">t_sne</button>            
             <button class="changeLayout" @click="itemRect">rect</button>
             <button class="changeLayout" @click="itemMap">Map</button>
         </div>
@@ -33,10 +30,17 @@
     import _ from "loadsh"
     export default {
         name: "GridAQILevel",
-        methods: {
-            changeShow(){
-                this.show = !this.show
-            },
+        props: ['layoutCategory'],
+        watch: {
+            layoutCategory(newV){
+                if(newV == 'tree'){
+                    this.treeLayout()
+                }else if(newV == 'grid'){
+                    this.grid()
+                }
+            }
+        },
+        methods: {            
             gridLayout(dataNum, itemSize, width, height, padding = {
                 widthGap: 10,
                 heightGap: 2
@@ -53,21 +57,14 @@
                 return gridPos
             },
             treeLayout: async function (){
-                let tree_Data = await d3.json("treeDataNew.json")
-                console.log("tree")
-                console.log(this.itemType)
-                console.log(this.$refs.layout.offsetWidth)
-                console.log(this.$refs.layout.offsetHeight)
+                let tree_Data = await d3.json("treeDataNew.json")                
                 let padding = {"left":20,"top":20}
                 const treemap = d3.treemap()
                     .tile(d3.treemapBinary)
                     .size([this.$refs.layout.offsetWidth,this.$refs.layout.offsetHeight])
-                const root = d3.hierarchy(tree_Data).sum(d=>d.AQI);
-                console.log(d3.group(root,d=>d.height))
-                console.log("d3.group")
+                const root = d3.hierarchy(tree_Data).sum(d=>d.AQI);                
                 const tree = treemap(root)
-                const leaves = tree.leaves()
-                console.log(leaves)
+                const leaves = tree.leaves()                
                 let treePos = []
                 const color = d3.scaleOrdinal(d3.schemeCategory10);
                 if(this.itemType==='rect'){
