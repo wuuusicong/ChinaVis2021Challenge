@@ -2,13 +2,33 @@
     <div ref="layout" class="layoutContainer">
         <div class="btn-container">
             <span>layout:</span>                   
-            <button class="changeLayout" @click="calendar">calendar</button>
+            <!-- <button class="changeLayout" @click="calendar">calendar</button> -->
             <button class="changeLayout" @click="t_sne">t_sne</button>            
             <button class="changeLayout" @click="itemRect">rect</button>
             <button class="changeLayout" @click="itemMap">Map</button>
         </div>
-
+        
+        <div class="mouth" v-if="layoutCategory == 'calendar'">
+            <span>Jan</span>
+            <span>Feb</span>
+            <span>Mar</span>
+            <span>Apr</span>
+            <span>May</span>
+            <span>June</span>
+            <span>July</span>
+            <span>Aug</span>
+            <span>Sep</span>
+            <span>Oct</span>
+            <span>Nov</span>
+            <span>Dec</span>
+        </div>
+        
         <div class="SmallMultiple" v-show="show">
+            <div class="year" v-if="layoutCategory == 'calendar'">
+                <template v-for="year in calendarYears">
+                    <span>{{year}}</span>
+                </template>
+            </div>
             <transition-group name="sm-trans" tag="div" class="transContainer">
                 <svg v-for="item in pic" class="map" :id="item.id" v-bind:key="item.id"
                     :style="{top:item.pos[1]+'px',left:item.pos[0]+'px'}"
@@ -18,7 +38,7 @@
                     :style="{transform:'translate('+item.pos[0]+'px,'+item.pos[1]+'px)'}"> -->
                     <image :xlink:href="item.src"  :width="itemSize" :height="itemSize" :id="item.imgId" />
                 </svg>
-            </transition-group>
+            </transition-group>            
         </div>
     </div>
 
@@ -37,6 +57,8 @@
                     this.treeLayout()
                 }else if(newV == 'grid'){
                     this.grid()
+                }else if(newV == 'calendar'){
+                    this.calendar()
                 }
             }
         },
@@ -108,12 +130,15 @@
             }) {
                 let tmpYears = d3.groups(timeData, d => new Date(d).getUTCFullYear()).reverse()
                 let calendarPos = []
+                let containerWidth = this.$refs.layout.offsetWidth;
+                let leftOffset = (containerWidth - 954) / 2;
+                this.calendarYears = tmpYears.map((v)=>{return v[0]})
                 for (let i in tmpYears) {
                     let yearGap = (this.itemSize + 2) * 7 * parseInt(i) + 20
                     tmpYears[i][1].forEach((item2) => {
                         let tmp = []
                         tmp[0] = d3.utcSunday.count(d3.utcYear(new Date(item2)), new Date(item2)) * (this
-                            .itemSize);
+                            .itemSize) + leftOffset;
                         tmp[1] = new Date(item2).getUTCDay() * this.itemSize + padding["heightGap"] + yearGap
                         calendarPos.push(tmp)
                     })
@@ -202,6 +227,7 @@
         data() {
             return {
                 show: true,
+                calendarYears: [],
                 position: [],
                 itemSize: 18,
                 pic: '',
@@ -228,7 +254,7 @@
     .btn-container {
         box-sizing: border-box;
         padding: 10px 10px;
-        height: 100px;
+        height: 60px;
     }
 
     .SmallMultiple {
@@ -236,6 +262,7 @@
         height: 100%;
     }
     .layoutContainer{
+        position: relative;
         width: 100%;
         height: 100%;
     }
@@ -256,4 +283,24 @@
     /*#itemRect{*/
     /*    background: black;*/
     /*}*/
+
+    .mouth{
+        margin: 0 auto;
+        width: 954px;
+        display: flex;
+        justify-content: space-around;
+    }
+
+    .year{
+        position: absolute;
+        left: 20px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .year span{
+        height: 145px;
+        line-height: 145px;
+        text-align: center;
+    }
 </style>

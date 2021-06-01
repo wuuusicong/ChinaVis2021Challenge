@@ -9,8 +9,10 @@
                 <img :src="tree" alt=""  width="190">
                 <span class="layout-name">tree</span>
             </div>
-            
-            
+            <div class="main-layout-nav" @click="changeLayout" data-name="calendar">
+                <img :src="tree" alt=""  width="190">
+                <span class="layout-name">calendar</span>
+            </div>            
         </div>
         <div class="main">
             <div class="status-control">
