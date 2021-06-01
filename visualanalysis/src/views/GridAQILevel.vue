@@ -85,31 +85,50 @@
                 const treemap = d3.treemap()
                     .tile(d3.treemapBinary)
                     .size([this.$refs.layout.offsetWidth,this.$refs.layout.offsetHeight])
+                    .paddingOuter(3)
+                    .paddingTop(19)
+                    .paddingInner(1)
+                    .round(true);
                 const root = d3.hierarchy(tree_Data).sum(d=>d.AQI);                
                 const tree = treemap(root)
                 console.log(tree)
                 console.log("node?")
+                const color = d3.scaleOrdinal(d3.schemeCategory10);
                 //头结点
-                let nodeSvg = $("<svg id='GridNode' class='map' style='top: 0;left: 0;'></svg>")
-                $('.transContainer').append(nodeSvg)
-                $("#GridNode").attr("width",tree["x1"]-tree["x0"])
-                                .attr("height",tree["y1"]-tree["y0"])
-                                .attr("background",'#000')
-
-                tree.children.forEach((item,index)=>{
-                    let itemID = 'GridNode'+index
-                    let node2Svg = $("<svg class='map'></svg>")
-                    node2Svg.id = itemID;
-                    $(itemID).attr("width",item["x1"]-item["x0"])
-                        .attr("height",item["y1"]-item["y0"])
-                        .attr("top",item["y0"])
-                        .attr("left",item["x0"]);
-                    $('.transContainer').append(node2Svg)
-                })
+                // let nodeSvg = $("<svg id='GridNode' class='map' style='top: 0;left: 0;'></svg>")
+                // $('.transContainer').append(nodeSvg)
+                // $("#GridNode").attr("width",tree["x1"]-tree["x0"])
+                //                 .attr("height",tree["y1"]-tree["y0"])
+                //                 .attr("background",'#000')
+                let node2 = d3.select("#mainSvg")
+                .selectAll(".node2")
+                .data(tree.children)
+                .enter()
+                .append("g")
+                .attr("transform", d => `translate(${d.x0},${d.y0})`);
+                node2
+                .append("rect")
+                .attr("fill", d => '#e86161')
+                .attr("width", d => d.x1 - d.x0)
+                .attr("height", d => d.y1 - d.y0);
+                node2.append("text")
+                    .attr("dy",15)
+                    .attr("fontSize",8)
+                    .text(d => d.data.name);
+                // tree.children.forEach((item,index)=>{
+                //     let itemID = 'GridNode'+index
+                //     let node2Svg = $("<svg class='map2'></svg>")
+                //     node2Svg.id = itemID;
+                //     $(itemID).attr("width",item["x1"]-item["x0"])
+                //         .attr("height",item["y1"]-item["y0"])
+                //         .attr("top",item["y0"])
+                //         .attr("left",item["x0"]);
+                //     $('.transContainer').append(node2Svg)
+                // })
 
                 const leaves = tree.leaves()                
                 let treePos = []
-                const color = d3.scaleOrdinal(d3.schemeCategory10);
+
                 console.log("tree??")
                 console.log(d3.group(root, d => d.height))
                 if(this.itemType==='rect'){
@@ -190,11 +209,11 @@
                 // console.log("动画？？")
                 d3.selectAll("svg>*")
                     .remove();
-                d3.selectAll("svg")
+                d3.selectAll(".map")
                     .attr("width",this.itemSize)
                     .attr("height",this.itemSize);
 
-                d3.selectAll("svg")
+                d3.selectAll(".map")
                     .append("rect")
                     .attr("id",(item,index)=>'img'+index)
                     .attr("width",this.itemSize)
@@ -265,6 +284,12 @@
 
 <style scoped>
     .map {
+        display: inline-block;
+        will-change: top,left;
+        /* transform: translateZ(0); */
+        position: absolute;
+    }
+    .map2 {
         display: inline-block;
         will-change: top,left;
         /* transform: translateZ(0); */
