@@ -55,29 +55,52 @@
             treeLayout: async function (){
                 let tree_Data = await d3.json("treeDataNew.json")
                 console.log("tree")
+                console.log(this.itemType)
                 console.log(this.$refs.layout.offsetWidth)
                 console.log(this.$refs.layout.offsetHeight)
+                let padding = {"left":20,"top":20}
                 const treemap = d3.treemap()
                     .tile(d3.treemapBinary)
                     .size([this.$refs.layout.offsetWidth,this.$refs.layout.offsetHeight])
                 const root = d3.hierarchy(tree_Data).sum(d=>d.AQI);
+                console.log(d3.group(root,d=>d.height))
+                console.log("d3.group")
                 const tree = treemap(root)
                 const leaves = tree.leaves()
                 console.log(leaves)
                 let treePos = []
                 const color = d3.scaleOrdinal(d3.schemeCategory10);
-                leaves.forEach((item,index)=>{
-                    treePos[item["data"]["index"]] = [item.x0,item.y0]
-                    let imgId = '#img'+item["data"]["index"]
-                    let gridId = '#grid'+item["data"]["index"]
-                    let imgSize = d3.min([(item.x1-item.x0),(item.y1-item.y0)])
-                    // console.log($(imgId))
-                    $(imgId).css("width",imgSize)
-                    $(imgId).css("height",imgSize)
-                    $(gridId).css("background",color(item.parent.data.name))
-                    $(gridId).css("width",imgSize)
-                    $(gridId).css("height",imgSize)
-                })
+                if(this.itemType==='rect'){
+
+                    leaves.forEach((item,index)=>{
+                        treePos[item["data"]["index"]] = [item.x0,item.y0]
+                        let imgId = '#img'+item["data"]["index"]
+                        let gridId = '#grid'+item["data"]["index"]
+                        let imgSize = d3.min([(item.x1-item.x0),(item.y1-item.y0)])
+                        // console.log($(imgId))
+                        let tmpWidth = item.x1-item.x0-1;
+                        let tmpHeight = item.y1-item.y0-1;
+                        $(imgId).attr("width",tmpWidth)
+                        $(imgId).attr("height",tmpHeight)
+                        $(gridId).attr("fill",color(item.parent.data.name))
+                        $(gridId).attr("width",tmpWidth)
+                        $(gridId).attr("height",tmpHeight)
+                    })
+                }else {
+                    leaves.forEach((item,index)=>{
+                        treePos[item["data"]["index"]] = [item.x0,item.y0]
+                        let imgId = '#img'+item["data"]["index"]
+                        let gridId = '#grid'+item["data"]["index"]
+                        let imgSize = d3.min([(item.x1-item.x0),(item.y1-item.y0)])
+                        // console.log($(imgId))
+                        $(imgId).attr("width",imgSize)
+                        $(imgId).attr("height",imgSize)
+                        $(gridId).attr("fill",color(item.parent.data.name))
+                        $(gridId).attr("width",imgSize)
+                        $(gridId).attr("height",imgSize)
+                    })
+                }
+
                 this.upDateLayout(treePos)
                 // console.log(treemap)
             },
@@ -122,13 +145,18 @@
                 d3.selectAll("svg>*")
                     .remove();
                 d3.selectAll("svg")
+                    .attr("width",this.itemSize)
+                    .attr("height",this.itemSize);
+
+                d3.selectAll("svg")
                     .append("rect")
                     .attr("id",(item,index)=>'img'+index)
                     .attr("width",this.itemSize)
                     .attr("height",this.itemSize)
                     .attr("x",0)
-                    attr("y",0)
-
+                    .attr("y",0);
+                this.itemType = 'rect';
+                console.log(this.itemType)
                 // this.drawSM(this.newGridPos)
             },
             itemMap:function (){
@@ -181,7 +209,8 @@
                 itemSize: 18,
                 pic: '',
                 gridPos: '',
-                gridPos2: []
+                gridPos2: [],
+                itemType:''
             };
         },
     }
