@@ -12,7 +12,11 @@
             <div class="main-layout-nav" @click="changeLayout" data-name="calendar">
                 <img :src="tree" alt=""  width="190">
                 <span class="layout-name">calendar</span>
-            </div>            
+            </div>
+            <div class="main-layout-nav" @click="changeLayout" data-name="t-sne">
+                <img :src="tree" alt=""  width="190">
+                <span class="layout-name">t-sne</span>
+            </div>
         </div>
         <div class="main">
             <div class="status-control">
@@ -43,7 +47,17 @@
                     </div>
                     <div class="item-slider">
                         <span class="control-category-title">item-size：</span><v-slider v-model="value"></v-slider>
-                    </div>            
+                    </div>
+                    <div class="btn-container">
+                        <span>item:</span>
+                        <!-- <button class="changeLayout" @click="calendar">calendar</button> -->
+                        <!--            <button class="changeLayout" @click="t_sne">t_sne</button>            -->
+<!--                        <button class="changeLayout" @click="itemRect">rect</button>-->
+<!--                        <button class="changeLayout" @click="itemMap">Map</button>-->
+                    </div>
+                    <svg id="controlMap">
+
+                    </svg>
                 </div>
             </div>
             <div class="layout">
@@ -51,7 +65,7 @@
             </div>
         </div>
         <div class="right">
-            <Report></Report>
+<!--            <Report></Report>-->
         </div>
     </div>
     <!-- <div id="demo"></div> -->
@@ -87,7 +101,8 @@
                 let category = e.currentTarget.dataset['name'];
                 console.log(category)
                 this.layoutCategory = category;
-            }
+            },
+
         },
         computed: {
             computedDateFormatted() {
@@ -151,7 +166,7 @@
     }
 
     .status-control {
-        height: 150px;
+        height: 15%;
         border-bottom: 1px solid #ddd;
         background-color: rgb(250, 250, 250);
     }
@@ -200,7 +215,19 @@
 
 
     .layout {
-        height: 100%;
+        height: 84%;
         position: relative;
+    }
+    .changeLayout {
+        display: inline-block;
+        width: 70px;
+        height: 30px;
+        border: 1px solid #aaa;
+        border-radius: 4px;
+        /* padding: 3px 3px; */
+        margin: 0px 5px;
+    }
+    .node2Text{
+        font-size: 10px;
     }
 </style>

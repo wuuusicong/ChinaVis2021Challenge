@@ -1,12 +1,6 @@
 <template>
     <div ref="layout" class="layoutContainer">
-        <div class="btn-container">
-            <span>layout:</span>                   
-            <!-- <button class="changeLayout" @click="calendar">calendar</button> -->
-            <button class="changeLayout" @click="t_sne">t_sne</button>            
-            <button class="changeLayout" @click="itemRect">rect</button>
-            <button class="changeLayout" @click="itemMap">Map</button>
-        </div>
+
         
         <div class="mouth" v-if="layoutCategory == 'calendar'">
             <span>Jan</span>
@@ -60,6 +54,8 @@
                     this.grid()
                 }else if(newV == 'calendar'){
                     this.calendar()
+                }else if(newV =='t-sne'){
+                    this.t_sne()
                 }
             }
         },
@@ -112,8 +108,8 @@
                 .attr("width", d => d.x1 - d.x0)
                 .attr("height", d => d.y1 - d.y0);
                 node2.append("text")
+                    .attr("class",".node2Text")
                     .attr("dy",15)
-                    .attr("fontSize",8)
                     .text(d => d.data.name);
                 // tree.children.forEach((item,index)=>{
                 //     let itemID = 'GridNode'+index
@@ -135,31 +131,50 @@
                     console.log(leaves)
 
                     leaves.forEach((item,index)=>{
+
+
                         treePos[item["data"]["index"]] = [item.x0,item.y0]
                         let imgId = '#img'+item["data"]["index"]
                         let gridId = '#grid'+item["data"]["index"]
+
+
+                        // d3.select(imgId).append("text")
+                        //     .text(d=>item["data"]["name"])
+                        //     .attr("dy",15);
+
+
                         let imgSize = d3.min([(item.x1-item.x0),(item.y1-item.y0)])
                         // console.log($(imgId))
+
                         let tmpWidth = item.x1-item.x0-1;
                         let tmpHeight = item.y1-item.y0-1;
                         $(imgId).attr("width",tmpWidth)
                         $(imgId).attr("height",tmpHeight)
                         $(gridId).attr("fill",color(item.parent.data.name))
                         $(gridId).attr("width",tmpWidth)
-                        $(gridId).attr("height",tmpHeight)
+                        $(gridId).attr("height",tmpHeight+10)
                     })
                 }else {
                     leaves.forEach((item,index)=>{
                         treePos[item["data"]["index"]] = [item.x0,item.y0]
                         let imgId = '#img'+item["data"]["index"]
                         let gridId = '#grid'+item["data"]["index"]
+
+
+                        // d3.select(gridId).append("text")
+                        // .text(d=>item["data"]["name"])
+                        //     .attr("dy",15)
+                        //     .attr("fontSize",5);
+
+
+
                         let imgSize = d3.min([(item.x1-item.x0),(item.y1-item.y0)])
                         // console.log($(imgId))
                         $(imgId).attr("width",imgSize)
                         $(imgId).attr("height",imgSize)
                         $(gridId).attr("fill",color(item.parent.data.name))
                         $(gridId).attr("width",imgSize)
-                        $(gridId).attr("height",imgSize)
+                        $(gridId).attr("height",imgSize+10)
                     })
                 }
 
@@ -227,7 +242,7 @@
             itemMap:function (){
                 d3.selectAll("svg>*")
                     .remove();
-                d3.selectAll("svg")
+                d3.selectAll(".map")
                     .append("image")
                     .attr("id",(item,index)=>'img'+index)
                     .attr("x",0)
@@ -236,8 +251,15 @@
                     .attr("height",this.itemSize)
                     .attr("xlink:href",(item,index)=>this.$store.state.pic[index].src)
             },
+            clearSvg(){
+                d3.selectAll("svg>*")
+                    .remove();
+            },
 
             upDateLayout(PosData) {
+                if(this.layoutCategory!=='tree'){
+                    this.clearSvg()
+                }
                 this.pic = this.$store.state.pic.map((item, index) => {
                     return {
                         ...item,
@@ -320,15 +342,7 @@
         height: 100%;
     }
 
-    .changeLayout {
-        display: inline-block;
-        width: 70px;
-        height: 30px;
-        border: 1px solid #aaa;
-        border-radius: 4px;
-        /* padding: 3px 3px; */
-        margin: 0px 5px;
-    }
+
 
     .changeLayout:hover {
         background-color: #eee;
@@ -356,4 +370,5 @@
         line-height: 145px;
         text-align: center;
     }
+
 </style>
