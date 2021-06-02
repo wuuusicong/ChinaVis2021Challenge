@@ -22,6 +22,7 @@
     import report from '@/assets/report.json'
     export default {
         name: "First",
+        props: ['dateRange'],
         data() {
             return {
                 p_name: this.load_name(),
@@ -116,10 +117,13 @@
 
     .news_list {
         margin: 0 auto;
-        font-size: 15px;
+        font-size: 15px;        
+        /* width: 250px;         */
+    }
+
+    #news_province{
+        height: 100vh;
         overflow: scroll;
-        width: 250px;
-        height: 2000px;
     }
 
     .option {

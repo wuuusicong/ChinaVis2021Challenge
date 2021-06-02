@@ -31,6 +31,7 @@
                         this.color = '#BF360C';
                         break;
                 }
+                this.$emit('ratingChange',newV);
             }
         }
     }

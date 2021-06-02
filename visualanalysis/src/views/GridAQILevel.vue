@@ -43,6 +43,7 @@
     import * as d3 from "d3"
     import * as $ from 'jquery'
     import _ from "loadsh"
+    import tree_Data from '@/assets/treeData/treeDataNew.json'
     export default {
         name: "GridAQILevel",
         props: ['layoutCategory'],
@@ -75,8 +76,7 @@
                 })
                 return gridPos
             },
-            treeLayout: async function (){
-                let tree_Data = await d3.json("treeDataNew.json")                
+            treeLayout: function (){         
                 let padding = {"left":20,"top":20}
                 const treemap = d3.treemap()
                     .tile(d3.treemapBinary)
@@ -276,19 +276,19 @@
             //     this.gridPos2 = gridPos
             // },
         },
-        async mounted() {
-            this.gridWidth = this.$refs.layout.offsetWidth;
-            this.gridHeight = this.$refs.layout.offsetHeight;
-            //加载图像
-            let data = await d3.json("AQIImg.json")
-            data.forEach((item) => {
-                let srcTmp = item
-                this.position.push(srcTmp)
-            })
-            console.log('dd')
-            this.gridPos = this.gridLayout(data.length, this.itemSize, this.gridWidth, this.gridHeight)
-            this.upDateLayout(this.gridPos)
-        },
+        // async mounted() {
+        //     this.gridWidth = this.$refs.layout.offsetWidth;
+        //     this.gridHeight = this.$refs.layout.offsetHeight;
+        //     //加载图像
+        //     let data = await d3.json("AQIImg.json")
+        //     data.forEach((item) => {
+        //         let srcTmp = item
+        //         this.position.push(srcTmp)
+        //     })
+        //     console.log('dd')
+        //     this.gridPos = this.gridLayout(data.length, this.itemSize, this.gridWidth, this.gridHeight)
+        //     this.upDateLayout(this.gridPos)
+        // },
         data() {
             return {
                 show: true,

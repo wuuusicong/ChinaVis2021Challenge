@@ -4,9 +4,9 @@
             max-width="290px" min-width="auto">
             <template v-slot:activator="{ on, attrs }">
                 <v-text-field v-model="dateFormatted" persistent-hint prepend-icon="mdi-calendar" v-bind="attrs"
-                    @blur="date = parseDate(dateFormatted)" v-on="on" class="ma-0"></v-text-field>
+                     v-on="on" class="ma-0"></v-text-field>
             </template>
-            <v-date-picker v-model="date" no-title @input="menu1 = false"></v-date-picker>
+            <v-date-picker v-model="date" type="month" no-title @input="menu1 = false"></v-date-picker>
         </v-menu>
     </div>
 </template>
@@ -22,18 +22,18 @@
         watch: {
             date(val) {
                 this.dateFormatted = this.formatDate(this.date)
+                this.$emit('dateChange',val);
             },
         },
         methods: {
             formatDate(date) {
                 if (!date) return null
 
-                const [year, month, day] = date.split('-')
-                return `${month}/${day}/${year}`
+                const [year, month, day] = date.split('-')                
+                return `${month}/${year}`
             },
             parseDate(date) {
                 if (!date) return null
-
                 const [month, day, year] = date.split('/')
                 return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`
             },
