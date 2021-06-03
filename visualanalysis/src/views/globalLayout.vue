@@ -55,16 +55,19 @@
 <!--                        <button class="changeLayout" @click="itemRect">rect</button>-->
 <!--                        <button class="changeLayout" @click="itemMap">Map</button>-->
                     </div>
-                    
+                </div>
+                <div class="status-control-third">
+                    <svg id="controlMap"></svg>
                 </div>
             </div>
             <div class="layout">
-                <GridAQILevel :layoutCategory="layoutCategory"></GridAQILevel>
+                <GridAQILevel :layoutCategory="layoutCategory" :pic="this.$store.state.pic.China"></GridAQILevel>
             </div>
         </div>
         <div class="right">
            <Report></Report>
         </div>
+        <div id="tooltip" style="opacity: 0;position: absolute"></div>
     </div>
     <!-- <div id="demo"></div> -->
 </template>
@@ -77,6 +80,9 @@
     import DatePicker from '@/components/DatePicker'
     import Rating from '@/components/Rating'
     import Report from '@/components/Report'
+    import map_Data from '@/assets/map/china.json'
+    import * as d3 from "d3";
+    import $ from "jquery"
     export default {
         components: {
             GridAQILevel,
@@ -91,7 +97,8 @@
                 grid,
                 renderCanvas: false,
                 value: 0,
-                layoutCategory: 'grid'
+                layoutCategory: 'grid',
+                province:''
             }
         },
         methods: {
@@ -110,8 +117,112 @@
                 if (e.target.tagName === 'LABEL') {return;}
                 let item = e.target.dataset['item']
                 console.log(item)
-            }
+            },
+            drawControlMap(){
+                let that = this;
+                let lengthSvg = [200,150]
+                let controlSvg = d3.select("#controlMap")
+                                    .attr("width",lengthSvg[0])
+                                    .attr("height",lengthSvg[1])
 
+                // let mapG = svg.append('g')
+                    // .attr("transform", `translate(${x},${y})`);
+
+                let projection = d3.geoMercator()
+                    .fitSize(lengthSvg,map_Data);
+
+                const path = d3.geoPath().projection(projection)
+
+                let province = controlSvg.selectAll('.gMap')
+                    .data(map_Data.features)
+                    .enter()
+                    .append("g")
+                    .append('path')
+                    .attr('d', path)
+                    .attr('fill', '#272823')
+                    .attr("stroke","white")
+                    .attr('stroke-width', 1)
+                    .attr('opacity', 0.6);
+                province.on("mousemove",function(d,i){
+                        // console.log( d3.select(this))
+                        // d3.select(this)
+                        //     .attr("fill", "yellow");
+                        // console.log(i)
+                        var x = d.pageX;
+                        var y = d.pageY + 30;
+                        $("#tooltip").text(i.properties.name);
+
+                        $("#tooltip") .css("left",x+"px")
+                            .css("top",y+"px")
+                            .css("opacity",1.0);
+                    })
+                    .on("mouseout", function(d, i) {
+                        // var t = linear(values[d.properties.name]);
+                        // var color = computeColor(t).toString();
+                        // d3.select(this)
+                        //     .attr("fill", '#272823');
+                        $("#tooltip").css("opacity",0.0);
+                    })
+                    .on("click",function (d,i) {
+                        province.attr("fill","#272823")
+                        d3.select(this)
+                            .attr("fill", 'yellow');
+                        that.province = i.properties.name
+                        console.log(that.province)
+                    });
+                // controlSvg.selectAll(".text")
+                //     .data(map_Data.features)
+                //     .enter()
+                //     .append("text")
+                //     .text(function(d, i) {
+                //         return d.properties.name.replace("省","")
+                //     })
+                //     .attr("fill", "black")
+                //     .attr("x", function(d) {
+                //         d.properties.name = d.properties.name.replace("省","")
+                //         if(d.properties.name == '河北') {
+                //             return path.centroid(d)[0] - 10;
+                //         } else if(d.properties.name == '天津') {
+                //             return path.centroid(d)[0] + 5;
+                //         } else if(d.properties.name == '香港') {
+                //             return path.centroid(d)[0] + 10;
+                //         } else if(d.properties.name == '澳门') {
+                //             return path.centroid(d)[0] - 10;
+                //         } else if(d.properties.name == '甘肃') {
+                //             return path.centroid(d)[0] + 35;
+                //         } else if(d.properties.name == '陕西') {
+                //             return path.centroid(d)[0] + 3;
+                //         } else if(d.properties.name == '内蒙古') {
+                //             return path.centroid(d)[0] + 20;
+                //         } else {
+                //             return path.centroid(d)[0]-5;
+                //         }
+                //     })
+                //     .attr("y", function(d) {
+                //         if(d.properties.name == '河北') {
+                //             return path.centroid(d)[1] + 20;
+                //         } else if(d.properties.name == '天津') {
+                //             return path.centroid(d)[1] + 5;
+                //         } else if(d.properties.name == '香港') {
+                //             return path.centroid(d)[1] + 10;
+                //         } else if(d.properties.name == '澳门') {
+                //             return path.centroid(d)[1] + 13;
+                //         } else if(d.properties.name == '甘肃') {
+                //             return path.centroid(d)[1] + 30;
+                //         } else if(d.properties.name == '陕西') {
+                //             return path.centroid(d)[1] + 10;
+                //         } else if(d.properties.name == '内蒙古') {
+                //             return path.centroid(d)[1] + 10;
+                //         } else {
+                //             return path.centroid(d)[1];
+                //         }
+                //     })
+                //     .style("font-size", "3px")
+            },
+
+        },
+        mounted() {
+            this.drawControlMap()
         },
         computed: {
             computedDateFormatted() {
@@ -196,6 +307,7 @@
         float: left;
     }
 
+
     .status-control .date,
     .status-control .pollution-events,
     .pollution-category{
@@ -223,6 +335,16 @@
         padding: 0px 8px;
     }
 
+    .status-control-third{
+        /*height: 100%;*/
+        box-sizing: border-box;
+        border-left: 1px solid #ddd;
+        width: 300px;
+        height: 100%;
+        padding-left: 10px;
+        /*padding-top: 10px;*/
+        float: left;
+    }
 
     .layout {
         height: 84vh;
@@ -240,4 +362,5 @@
     .node2Text{
         font-size: 10px;
     }
+
 </style>

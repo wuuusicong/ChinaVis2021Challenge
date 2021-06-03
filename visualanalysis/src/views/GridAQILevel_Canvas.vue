@@ -6,7 +6,7 @@
     import *as d3 from "d3"
     import * as $ from 'jquery'
     const pic = []
-    const contexts = require.context('@/assets/heatmapDataAll/', true, /\.jpg$/);
+    const contexts = require.context('@/assets/China/', true, /\.jpg$/);
     contexts.keys().forEach((item,index) => {
         pic[index] = {}
         pic[index]["src"] = contexts(item);

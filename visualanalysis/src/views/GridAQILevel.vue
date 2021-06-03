@@ -1,5 +1,5 @@
 <template>
-    <div ref="layout" class="layoutContainer">
+    <div ref="layout" class="layoutContainer" id="layout">
 
         
         <div class="mouth" v-if="layoutCategory == 'calendar'">
@@ -25,7 +25,7 @@
             </div>
             <svg id="mainSvg" style='top:0;left: 0'></svg>
             <transition-group name="sm-trans" tag="div" class="transContainer">
-                <svg v-for="item in pic" class="map" :id="item.id" v-bind:key="item.id"
+                <svg v-for="item in this.pic" class="map" :id="item.id" v-bind:key="item.id"
                     :style="{top:item.pos[1]+'px',left:item.pos[0]+'px'}"
                      :width="itemSize" :height="itemSize"
                 >
@@ -44,9 +44,10 @@
     import * as $ from 'jquery'
     import _ from "loadsh"
     import tree_Data from '@/assets/treeData/treeDataNew.json'
+    import AQI_img from '@/assets/AQIImg.json'
     export default {
         name: "GridAQILevel",
-        props: ['layoutCategory'],
+        props: ['layoutCategory','pic'],
         watch: {
             layoutCategory(newV){
                 if(newV == 'tree'){
@@ -260,7 +261,7 @@
                 if(this.layoutCategory!=='tree'){
                     this.clearSvg()
                 }
-                this.pic = this.$store.state.pic.map((item, index) => {
+                this.pic = this.pic.map((item, index) => {
                     return {
                         ...item,
                         pos: PosData[index]
@@ -276,26 +277,26 @@
             //     this.gridPos2 = gridPos
             // },
         },
-        // async mounted() {
-        //     this.gridWidth = this.$refs.layout.offsetWidth;
-        //     this.gridHeight = this.$refs.layout.offsetHeight;
-        //     //加载图像
-        //     let data = await d3.json("AQIImg.json")
-        //     data.forEach((item) => {
-        //         let srcTmp = item
-        //         this.position.push(srcTmp)
-        //     })
-        //     console.log('dd')
-        //     this.gridPos = this.gridLayout(data.length, this.itemSize, this.gridWidth, this.gridHeight)
-        //     this.upDateLayout(this.gridPos)
-        // },
+            mounted() {
+            console.log(this.pic)
+            this.gridWidth = this.$refs.layout.offsetWidth;
+            this.gridHeight = this.$refs.layout.offsetHeight;
+            //加载图像
+            let data = AQI_img
+            data.forEach((item) => {
+                let srcTmp = item
+                this.position.push(srcTmp)
+            })
+            console.log('dd')
+            this.gridPos = this.gridLayout(data.length, this.itemSize, this.gridWidth, this.gridHeight)
+            this.upDateLayout(this.gridPos)
+        },
         data() {
             return {
                 show: true,
                 calendarYears: [],
                 position: [],
                 itemSize: 18,
-                pic: '',
                 gridPos: '',
                 gridPos2: [],
                 itemType:''
