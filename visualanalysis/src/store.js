@@ -14,6 +14,7 @@ provinceFolder.forEach((item1,index)=>{
   console.log(route)
   let contexts = require.context('@/assets/heatMapData/China/', true, /\.png$/);
   contexts.keys().forEach((item, index) => {
+    if(index>500)return
     pic[item1][index] = {}
     pic[[item1]][index]["src"] = contexts(item);
     pic[[item1]][index]["id"] = 'grid' + index
@@ -27,6 +28,7 @@ export default new Vuex.Store({
   state: {
     count: 0,
     pic,
+    itemSize:18
   },
   mutations: {
     increment(state) {

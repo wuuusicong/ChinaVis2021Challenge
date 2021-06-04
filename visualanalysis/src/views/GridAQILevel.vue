@@ -31,7 +31,7 @@
                 >
                 <!-- <div v-for="item in pic" class="map" :id="item.id" v-bind:key="item.id"
                     :style="{transform:'translate('+item.pos[0]+'px,'+item.pos[1]+'px)'}"> -->
-                    <image :xlink:href="item.src"  :width="itemSize" :height="itemSize" :id="item.imgId" />
+                    <image :xlink:href="item.src"  :width="itemSize" :height="itemSize" :id="item.imgId" class="mapImg"/>
                 </svg>
             </transition-group>            
         </div>
@@ -43,7 +43,7 @@
     import * as d3 from "d3"
     import * as $ from 'jquery'
     import _ from "loadsh"
-    import tree_Data from '@/assets/treeData/treeDataNew.json'
+    import tree_Data from '@/assets/treeData/barChatTree_v2.json'
     import AQI_img from '@/assets/AQIImg.json'
     export default {
         name: "GridAQILevel",
@@ -86,6 +86,9 @@
                     .paddingTop(19)
                     .paddingInner(1)
                     .round(true);
+
+
+
                 const root = d3.hierarchy(tree_Data).sum(d=>d.AQI);                
                 const tree = treemap(root)
                 console.log(tree)
@@ -102,6 +105,7 @@
                 .data(tree.children)
                 .enter()
                 .append("g")
+                .attr("class","treeLayoutG")
                 .attr("transform", d => `translate(${d.x0},${d.y0})`);
                 node2
                 .append("rect")
@@ -125,8 +129,9 @@
 
                 const leaves = tree.leaves()                
                 let treePos = []
-
-                console.log("tree??")
+                console.log("treeData")
+                console.log(tree_Data)
+                console.log(leaves)
                 console.log(d3.group(root, d => d.height))
                 if(this.itemType==='rect'){
                     console.log(leaves)
@@ -192,6 +197,9 @@
                 let containerWidth = this.$refs.layout.offsetWidth;
                 let leftOffset = (containerWidth - 954) / 2;
                 this.calendarYears = tmpYears.map((v)=>{return v[0]})
+                let sum =0
+                const days = [0,1,2,3,4,5,6]
+                const dayEng = ["S","M","T","W","T","F","S"]
                 for (let i in tmpYears) {
                     let yearGap = (this.itemSize + 2) * 7 * parseInt(i) + 20
                     tmpYears[i][1].forEach((item2) => {
@@ -200,7 +208,23 @@
                             .itemSize) + leftOffset;
                         tmp[1] = new Date(item2).getUTCDay() * this.itemSize + padding["heightGap"] + yearGap
                         calendarPos.push(tmp)
+                        // console.log(sum)
+                        // console.log(new Date(item2).getUTCDay())
+                        sum++;
                     })
+                   let mainSvg =  d3.select("#mainSvg");
+                    mainSvg .selectAll(".dateEng")
+                      .data(days)
+                      .enter()
+                      .append("text")
+                      .attr("class","calendarG")
+                      .text((d,i)=>dayEng[d])
+                      .attr("x",(d,i)=>230)
+                      .attr("y",(d,i)=>d * this.itemSize + padding["heightGap"] + yearGap)
+                      .attr("dy",12)
+                      .attr("font-size",10);
+
+
                 }
                 return calendarPos
             },
@@ -253,12 +277,29 @@
                     .attr("xlink:href",(item,index)=>this.$store.state.pic[index].src)
             },
             clearSvg(){
-                d3.selectAll("svg>*")
-                    .remove();
-            },
+                if(this.layoutCategory!=='tree'){
+                    d3.selectAll(".treeLayoutG")
+                        .remove();
+                }
+                if(this.layoutCategory!=='calendar'){
+                    d3.selectAll(".calendarG")
+                        .remove();
+                }
 
+                d3.selectAll(".map")
+                    .attr("width",this.$store.state.itemSize)
+                    .attr("height",this.$store.state.itemSize);
+                d3.selectAll(".mapImg")
+                    .attr("width",this.$store.state.itemSize)
+                    .attr("height",this.$store.state.itemSize);
+            },
+            barChartLayout(data,width,height){
+                let y = data["type"]
+                let x = data["number"]
+            },
             upDateLayout(PosData) {
                 if(this.layoutCategory!=='tree'){
+                    console.log("not tree")
                     this.clearSvg()
                 }
                 this.pic = this.pic.map((item, index) => {
@@ -279,8 +320,10 @@
         },
             mounted() {
             console.log(this.pic)
-            this.gridWidth = this.$refs.layout.offsetWidth;
-            this.gridHeight = this.$refs.layout.offsetHeight;
+            // this.gridWidth = this.$refs.layout.offsetWidth;
+            // this.gridHeight = this.$refs.layout.offsetHeight;
+            this.gridWidth = 1453;
+            this.gridHeight = 840;
             //加载图像
             let data = AQI_img
             data.forEach((item) => {

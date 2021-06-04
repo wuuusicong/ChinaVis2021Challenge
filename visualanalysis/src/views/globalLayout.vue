@@ -119,6 +119,7 @@
                 console.log(item)
             },
             drawControlMap(){
+                console.log("controlMap")
                 let that = this;
                 let lengthSvg = [200,150]
                 let controlSvg = d3.select("#controlMap")
