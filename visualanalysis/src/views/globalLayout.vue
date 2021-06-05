@@ -23,9 +23,9 @@
                 <div class="status-control-first">
                     <div class="date">
                         <span class="control-category-title">时间：</span>
-                        <DatePicker @dateChange="getDate"></DatePicker>
+                        <DatePicker @dateChange="getStartDate"></DatePicker>
                         <span style="margin:0px 8px"> -- </span>
-                        <DatePicker @dateChange="getDate"></DatePicker>
+                        <DatePicker @dateChange="getEndDate"></DatePicker>
                     </div>
                     <div class="pollution-events">
                         <span class="control-category-title">污染等级：</span>
@@ -38,6 +38,8 @@
                             <li class="pollution-item" data-item="pm10"><input id="pm10" type="radio" name="pollution-item" data-item="pm10"> <label for="pm10">pm10</label></li>
                             <li class="pollution-item" data-item="CO2"><input id="CO2" type="radio" name="pollution-item" data-item="CO2"> <label for="CO2">CO2</label></li>
                             <li class="pollution-item" data-item="SO2"><input id="SO2" type="radio" name="pollution-item" data-item="SO2"> <label for="SO2">SO2</label></li>
+                            <li class="pollution-item" data-item="O3"><input id="O3" type="radio" name="pollution-item" data-item="O3"> <label for="O3">O3</label></li>
+                            <li class="pollution-item" data-item="NOx"><input id="NOx" type="radio" name="pollution-item" data-item="NOx"> <label for="NOx">NOx</label></li>
                         </ul>
                     </div>
                 </div>
@@ -65,7 +67,7 @@
             </div>
         </div>
         <div class="right">
-           <Report></Report>
+           <Report :dateRange="DateRange" :pollution_item="Pollution_Item" :province_name="province"></Report>
         </div>
         <div id="tooltip" style="opacity: 0;position: absolute"></div>
     </div>
@@ -98,7 +100,12 @@
                 renderCanvas: false,
                 value: 0,
                 layoutCategory: 'grid',
-                province:''
+                province:' ',
+                DateRange: {
+                    StartDate: '2013-01',
+                    EndDate: '2019-01'
+                },
+                Pollution_Item: ' '
             }
         },
         methods: {
@@ -107,8 +114,17 @@
                 console.log(category)
                 this.layoutCategory = category;
             },
-            getDate(date){
+            getStartDate(date){
                 console.log(date)
+                setTimeout(() =>{
+                    this.DateRange.StartDate = date;
+                },250);
+            },
+            getEndDate(date){
+                console.log(date)
+                setTimeout(() =>{
+                    this.DateRange.EndDate = date;
+                },250);
             },
             getRating(rating){
                 console.log(rating)
@@ -117,6 +133,9 @@
                 if (e.target.tagName === 'LABEL') {return;}
                 let item = e.target.dataset['item']
                 console.log(item)
+                setTimeout(() =>{
+                    this.Pollution_Item = item;
+                },250);
             },
             drawControlMap(){
                 console.log("controlMap")
