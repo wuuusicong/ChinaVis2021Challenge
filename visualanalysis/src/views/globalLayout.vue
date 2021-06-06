@@ -179,6 +179,7 @@
                         // d3.select(this)
                         //     .attr("fill", "yellow");
                         // console.log(i)
+                        $("#tooltip>*").remove();
                         var x = d.pageX;
                         var y = d.pageY + 30;
                         $("#tooltip").text(i.properties.name);

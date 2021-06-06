@@ -28,6 +28,11 @@
                 <svg v-for="item in this.pic" class="map" :id="item.id" v-bind:key="item.id"
                     :style="{top:item.pos[1]+'px',left:item.pos[0]+'px'}"
                      :width="itemSize" :height="itemSize"
+                     :data-date="item.date" @click="itemSelect"
+                     :data-number = "item.number"
+                     :data-src = "item.src"
+                     @mousemove="showItemDate"
+                     @mouseout="showNoItemDate"
                 >
                 <!-- <div v-for="item in pic" class="map" :id="item.id" v-bind:key="item.id"
                     :style="{transform:'translate('+item.pos[0]+'px,'+item.pos[1]+'px)'}"> -->
@@ -166,11 +171,6 @@
                         let imgId = '#img'+item["data"]["index"]
                         let gridId = '#grid'+item["data"]["index"]
 
-
-                        // d3.select(gridId).append("text")
-                        // .text(d=>item["data"]["name"])
-                        //     .attr("dy",15)
-                        //     .attr("fontSize",5);
 
 
 
@@ -319,6 +319,77 @@
             //     })
             //     this.gridPos2 = gridPos
             // },
+
+
+        //    item 交互
+            itemSelect(e){
+                // console.log(e.currentTarget.dataset);
+                // console.log(e.currentTarget.id);
+                const itemID = '#'+e.currentTarget.id
+                const itemNum = parseInt(e.currentTarget.dataset["number"])
+                // console.log(itemNum)
+                // console.log( e.currentTarget.dataset["dataset"])
+                this.eventData[e.currentTarget.dataset["date"]].select = 1;
+                this.springFestival()
+                // this.itemStyleShow(itemID,itemNum)
+            },
+            showItemDate(e){
+                $("#tooltip>*").remove();
+                $("#tooltip").text("")
+                let src = e.currentTarget.dataset["src"]
+                let date = e.currentTarget.dataset["date"]
+                var x = e.pageX;
+                var y = e.pageY + 30;
+                let img = document.createElement("img")
+                img.src = src;
+                img.width = this.itemSize*10
+                img.height = this.itemSize*10
+                // console.log(date)
+                $("#tooltip").text(date);
+                $("#tooltip").append(img)
+
+                $("#tooltip") .css("left",x+"px")
+                    .css("top",y+"px")
+                    .css("opacity",1.0);
+            },
+            showNoItemDate(e){
+                $("#tooltip>*").remove();
+                $("#tooltip").text("")
+            },
+            itemStyleShow(itemId,itemNum){
+
+                this.currentOpacity = this.currentOpacity.map((item,index)=>
+                {
+                    // if(item===1)return 1
+                    let opacity = 0.2;
+                    // console.log(this.eventData[item["date"]])
+                    if(this.eventData[item["date"]].select===1)opacity =1
+                    if(index===itemNum)opacity =1 ;
+                    return  {...item,opacity:opacity};
+                }
+                )
+                // console.log(this.currentOpacity)
+                this.opacityShow()
+            },
+            springFestival(){
+                let event = "Spring Festival";
+                this.currentOpacity = this.currentOpacity.map((item,index)=>{
+                    if(this.eventData[item["date"]]["eventHoliday"][event]===1){
+                        return {...item,opacity:1}
+                    }else return {...item,opacity: 0.2}
+                })
+                console.log("spring");
+                console.log(this.currentOpacity)
+                this.opacityShow();
+            },
+            opacityShow(){
+                let that = this;
+                // console.log("click")
+                // console.log(this.currentOpacity)
+                d3.selectAll(".map")
+                .attr("opacity",(item,index)=>that.currentOpacity[index]["opacity"])
+            }
+
         },
             mounted() {
             console.log(this.pic)
@@ -334,7 +405,8 @@
             })
             console.log('dd')
             this.gridPos = this.gridLayout(data.length, this.itemSize, this.gridWidth, this.gridHeight)
-            this.upDateLayout(this.gridPos)
+            this.upDateLayout(this.gridPos);
+
         },
         data() {
             return {
@@ -344,7 +416,9 @@
                 itemSize: 18,
                 gridPos: '',
                 gridPos2: [],
-                itemType:''
+                itemType:'',
+                currentOpacity:this.$store.state.opacityGroup,
+                eventData:this.$store.state.eventData
             };
         },
     }
