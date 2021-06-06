@@ -194,6 +194,8 @@
             }) {
                 let tmpYears = d3.groups(timeData, d => new Date(d).getUTCFullYear()).reverse()
                 let calendarPos = []
+                let mainSvg =  d3.select("#mainSvg");
+
                 let containerWidth = this.$refs.layout.offsetWidth;
                 let leftOffset = (containerWidth - 954) / 2;
                 this.calendarYears = tmpYears.map((v)=>{return v[0]})
@@ -205,24 +207,27 @@
                     tmpYears[i][1].forEach((item2) => {
                         let tmp = []
                         tmp[0] = d3.utcSunday.count(d3.utcYear(new Date(item2)), new Date(item2)) * (this
-                            .itemSize) + leftOffset;
+                            .itemSize) + leftOffset+new Date(item2).getMonth()*7;
+
+                        // console.log(new Date(item2).getMonth()+1)
                         tmp[1] = new Date(item2).getUTCDay() * this.itemSize + padding["heightGap"] + yearGap
                         calendarPos.push(tmp)
                         // console.log(sum)
                         // console.log(new Date(item2).getUTCDay())
                         sum++;
                     })
-                   let mainSvg =  d3.select("#mainSvg");
+
                     mainSvg .selectAll(".dateEng")
                       .data(days)
                       .enter()
                       .append("text")
                       .attr("class","calendarG")
                       .text((d,i)=>dayEng[d])
-                      .attr("x",(d,i)=>230)
+                      .attr("x",(d,i)=>220)
                       .attr("y",(d,i)=>d * this.itemSize + padding["heightGap"] + yearGap)
                       .attr("dy",12)
-                      .attr("font-size",10);
+                      .attr("font-size",10)
+                      .attr("stroke","white");
 
 
                 }
@@ -298,10 +303,7 @@
                 let x = data["number"]
             },
             upDateLayout(PosData) {
-                if(this.layoutCategory!=='tree'){
-                    console.log("not tree")
-                    this.clearSvg()
-                }
+                this.clearSvg()
                 this.pic = this.pic.map((item, index) => {
                     return {
                         ...item,
@@ -385,7 +387,9 @@
         width: 100%;
         height: 100%;
     }
-
+    .calendarG{
+        color: white;
+    }
 
 
     .changeLayout:hover {
@@ -397,9 +401,10 @@
 
     .mouth{
         margin: 0 auto;
-        width: 954px;
+        width: 1000px;
         display: flex;
         justify-content: space-around;
+        margin-left: 250px;
     }
 
     .year{

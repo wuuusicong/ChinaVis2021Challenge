@@ -57,6 +57,17 @@
 <!--                        <button class="changeLayout" @click="itemRect">rect</button>-->
 <!--                        <button class="changeLayout" @click="itemMap">Map</button>-->
                     </div>
+                    </div>
+                <div class="status-control-forth">
+                    <div>
+                        event
+                    </div>
+                    <ul class="event-list" @click="getPollutionItem">
+                        <li class="event-item" data-item="chuxi"><input id="chuxi" type="radio" name="event-item" data-item="chuxi"> <label for="chuxi">除夕夜</label></li>
+<!--                        <li class="pollution-item" data-item="pm10"><input id="pm10" type="radio" name="pollution-item" data-item="pm10"> <label for="pm10">pm10</label></li>-->
+<!--                        <li class="pollution-item" data-item="CO2"><input id="CO2" type="radio" name="pollution-item" data-item="CO2"> <label for="CO2">CO2</label></li>-->
+<!--                        <li class="pollution-item" data-item="SO2"><input id="SO2" type="radio" name="pollution-item" data-item="SO2"> <label for="SO2">SO2</label></li>-->
+                    </ul>
                 </div>
                 <div class="status-control-third">
                     <svg id="controlMap"></svg>
@@ -275,6 +286,7 @@
     #layoutContainer {
         width: 100%;
         height: 100%;
+        background: #1f1f1f;
     }
 
     .left {
@@ -282,7 +294,8 @@
         width: 199px;
         height: 100%;
         border-right: 1px solid #ddd;
-        background-color: rgb(250, 250, 250);
+        /*background-color: rgb(250, 250, 250);*/
+        background: #1f1f1f;
     }
 
     .right {
@@ -309,7 +322,8 @@
     .status-control {
         height: 15vh;
         border-bottom: 1px solid #ddd;
-        background-color: rgb(250, 250, 250);
+        /*background-color: rgb(250, 250, 250);*/
+        background-color: #1f1f1f);
     }
 
     .status-control-first {
@@ -365,6 +379,16 @@
         /*padding-top: 10px;*/
         float: left;
     }
+    .status-control-forth{
+        /*height: 100%;*/
+        box-sizing: border-box;
+        border-left: 1px solid #ddd;
+        width: 300px;
+        height: 100%;
+        padding-left: 10px;
+        /*padding-top: 10px;*/
+        float: left;
+    }
 
     .layout {
         height: 84vh;
@@ -382,5 +406,10 @@
     .node2Text{
         font-size: 10px;
     }
+    .layout-name{
+        color: #1f1f1f;
+    }
+
+
 
 </style>

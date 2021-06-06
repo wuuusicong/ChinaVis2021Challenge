@@ -12,3 +12,9 @@
     },
   };
 </script>
+<style>
+  #app{
+    background: #1f1f1f;
+    color: white;
+  }
+</style>
