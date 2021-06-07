@@ -31,12 +31,16 @@
                      :data-date="item.date" @click="itemSelect"
                      :data-number = "item.number"
                      :data-src = "item.src"
-                     @mousemove="showItemDate"
-                     @mouseout="showNoItemDate"
                 >
                 <!-- <div v-for="item in pic" class="map" :id="item.id" v-bind:key="item.id"
                     :style="{transform:'translate('+item.pos[0]+'px,'+item.pos[1]+'px)'}"> -->
-                    <image :xlink:href="item.src"  :width="itemSize" :height="itemSize" :id="item.imgId" class="mapImg"/>
+                    <image :xlink:href="item.src"  :width="itemSize" :height="itemSize"
+                           @mousemove="showItemDate"
+                           @mouseout="showNoItemDate"
+                           :data-date="item.date" @click="itemSelect"
+                           :data-number = "item.number"
+                           :data-src = "item.src"
+                           :id="item.imgId" class="mapImg"/>
                 </svg>
             </transition-group>            
         </div>
@@ -66,7 +70,15 @@
                 }
             }
         },
-        methods: {            
+        methods: {
+            initLayout(){
+                this.gridWidth = 1453;
+                this.gridHeight = 840;
+
+                let initItemPos = [this.gridWidth/2-30,this.gridHeight/2]
+                let initPos = AQI_img.map((item,index)=>initItemPos)
+                this.upDateLayout(initPos)
+            },
             gridLayout(dataNum, itemSize, width, height, padding = {
                 widthGap: 10,
                 heightGap: 2
@@ -75,9 +87,9 @@
                 let gridPos = []
                 new Array(dataNum).fill('').forEach((item, index) => {
                     let tmp = []
-                    tmp[0] = (index % itemNum) * (itemSize + padding["widthGap"]) + padding["widthGap"] / 2
+                    tmp[0] = (index % itemNum) * (itemSize + padding["widthGap"]) + padding["widthGap"] / 2 +15
                     tmp[1] = (parseInt(index / itemNum)) * (itemSize + padding["heightGap"]) + padding[
-                        "heightGap"]
+                        "heightGap"]+20
                     gridPos.push(tmp)
                 })
                 return gridPos
@@ -114,7 +126,7 @@
                 .attr("transform", d => `translate(${d.x0},${d.y0})`);
                 node2
                 .append("rect")
-                .attr("fill", d => '#e86161')
+                .attr("fill", d => 'white')
                 .attr("width", d => d.x1 - d.x0)
                 .attr("height", d => d.y1 - d.y0);
                 node2.append("text")
@@ -163,7 +175,10 @@
                         $(imgId).attr("height",tmpHeight)
                         $(gridId).attr("fill",color(item.parent.data.name))
                         $(gridId).attr("width",tmpWidth)
-                        $(gridId).attr("height",tmpHeight+10)
+                        $(gridId).attr("height",tmpHeight)
+                        // $(gridId).css("border","solid")
+                        // $(gridId).css("border-color","black")
+                        // $(gridId).css("border-width","0.5")
                     })
                 }else {
                     leaves.forEach((item,index)=>{
@@ -179,8 +194,10 @@
                         $(imgId).attr("width",imgSize)
                         $(imgId).attr("height",imgSize)
                         $(gridId).attr("fill",color(item.parent.data.name))
-                        $(gridId).attr("width",imgSize)
-                        $(gridId).attr("height",imgSize+10)
+                        $(gridId).attr("width",imgSize+1)
+                        $(gridId).attr("height",imgSize+1)
+                        $(imgId).css("border","solid")
+                        $(imgId).css("border-color","black")
                     })
                 }
 
@@ -234,7 +251,23 @@
                 return calendarPos
             },
             grid() {
-                this.upDateLayout(this.gridPos)
+                console.log(this.pic)
+                // this.gridWidth = this.$refs.layout.offsetWidth;
+                // this.gridHeight = this.$refs.layout.offsetHeight;
+                this.gridWidth = 1453;
+                this.gridHeight = 840;
+
+                //加载图像
+                let data = AQI_img
+                data.forEach((item) => {
+                    let srcTmp = item
+                    this.position.push(srcTmp)
+                })
+                console.log('dd')
+                let itemSize = this.itemSize
+                let gridPos = this.gridLayout(data.length, itemSize, this.gridWidth, this.gridHeight)
+                this.upDateLayout(gridPos);
+                // this.upDateLayout(this.gridPos)
             },
             t_sne: async function () {
                 let t_sneData = await d3.json("PCA50-t-sne_AQI.json")
@@ -280,6 +313,103 @@
                     .attr("width",this.itemSize)
                     .attr("height",this.itemSize)
                     .attr("xlink:href",(item,index)=>this.$store.state.pic[index].src)
+            },
+            itemPieChart:async function (){
+                d3.selectAll(".map>*")
+                    .remove();
+                d3.selectAll(".map")
+                    .attr("width",this.itemSize)
+                    .attr("height",this.itemSize);
+                let data = await d3.json("PieChartData.json")
+                console.log("pieChartData")
+                console.log(data)
+                d3.select("#pieChart")
+                .attr("width",150)
+                .attr("height",50)
+                let legendData = data[0]["AQI"]
+                let colorScale = d3
+                    .scaleOrdinal()
+                    .domain(d3.range(0, legendData.length))
+                    .range(d3.schemeSet1);
+                let legend = d3.select("#pieChart").append('g')
+                    .selectAll('g')
+                    .data(data[0]["AQI"])
+                    .enter()
+                    .append('g')
+                    .attr('transform', function(d, i) {
+                        return 'translate(' + i *18 + ',0)'
+                    });
+                legend
+                    .append('rect')
+                    .attr('width', 10)
+                    .attr('height', 10)
+                    .attr('fill', function(d,index) {
+
+                        console.log(d)
+                        return colorScale(index)
+                    });
+                legend
+                    .append('text')
+                    .text(function(d) {
+                        console.log(d)
+                        return d.x
+                    })
+                    .style('font-size', 8)
+                    .attr('y', '3em')
+                    .attr('x', '0')
+                    .attr('dy', 3)
+                    .attr("stroke","white")
+                    .attr("stroke-width","1px");
+
+
+
+
+                data.forEach((item,index)=>{
+                    let svgId = '#grid'+index;
+                    let svg = d3.select(svgId)
+                    this.drawOnePie(svg,item["AQI"])
+                })
+
+            },
+            drawOnePie(svg,data){
+              // const [width,height]= this.itemSize;
+              let g = svg.append("g")
+                  .attr('transform', 'translate( 5, 5 )');
+              let radius = this.itemSize*0.8/3;
+              let arc = d3.arc()
+                    .innerRadius(10)
+                    // .outerRadius(radius)
+                    .cornerRadius(5);
+                let drawData = d3
+                    .pie()
+                    .value(function(d) {
+                        return d.y
+                    })
+                    .sort(null)
+                    .sortValues(null)
+                    .startAngle(0)
+                    .endAngle(Math.PI * 2)
+                    .padAngle(0.05)(data);
+                let colorScale = d3
+                    .scaleOrdinal()
+                    .domain(d3.range(0, data.length))
+                    .range(d3.schemeSet1);
+                g.append('g')
+                    .attr('transform', 'translate( ' + radius + ', ' + radius + ' )')
+                    .attr('stroke', 'steelblue')
+                    .attr('stroke-width', 1)
+                    .selectAll('path')
+                    .data(drawData)
+                    .enter()
+                    .append('path')
+                    .attr('fill', function(d) {
+                        return colorScale(d.index)
+                    })
+                    .attr('d', function(d) {
+                        d.outerRadius = radius;
+                        return arc(d)
+                    })
+
             },
             clearSvg(){
                 if(this.layoutCategory!=='tree'){
@@ -392,20 +522,8 @@
 
         },
             mounted() {
-            console.log(this.pic)
-            // this.gridWidth = this.$refs.layout.offsetWidth;
-            // this.gridHeight = this.$refs.layout.offsetHeight;
-            this.gridWidth = 1453;
-            this.gridHeight = 840;
-            //加载图像
-            let data = AQI_img
-            data.forEach((item) => {
-                let srcTmp = item
-                this.position.push(srcTmp)
-            })
-            console.log('dd')
-            this.gridPos = this.gridLayout(data.length, this.itemSize, this.gridWidth, this.gridHeight)
-            this.upDateLayout(this.gridPos);
+
+            this.grid()
 
         },
         data() {
@@ -438,10 +556,12 @@
         position: absolute;
     }
 
-    .sm-trans-move {
-        transition: transform 1s;
-    }
-
+    /*.sm-trans-move{*/
+    /*    transition: transform 2s,width 2s, height 2s ;*/
+    /*}*/
+    /*.sm-trans-active, .sm-trans-active {*/
+    /*    transition: all 1s;*/
+    /*}*/
     .btn-container {
         box-sizing: border-box;
         padding: 10px 10px;
@@ -492,6 +612,10 @@
         height: 145px;
         line-height: 145px;
         text-align: center;
+    }
+    .mapImg,.map{
+        transition: width 2s, height 2s, transform 2s;
+
     }
 
 </style>

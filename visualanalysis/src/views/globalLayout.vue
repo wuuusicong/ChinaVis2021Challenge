@@ -44,18 +44,22 @@
                     </div>
                 </div>
                 <div class="status-control-second">
-                    <div class="item-slider">
-                        <span class="control-category-title">item-num：</span><v-slider v-model="value"></v-slider>    
-                    </div>
-                    <div class="item-slider">
-                        <span class="control-category-title">item-size：</span><v-slider v-model="value"></v-slider>
-                    </div>
+<!--                    <div class="item-slider">-->
+<!--                        <span class="control-category-title">item-num：</span><v-slider v-model="value"></v-slider>    -->
+<!--                    </div>-->
+<!--                    <div class="item-slider">-->
+<!--                        <span class="control-category-title">item-size：</span><v-slider v-model="value"></v-slider>-->
+<!--                    </div>-->
                     <div class="btn-container">
                         <span>item:</span>
                         <!-- <button class="changeLayout" @click="calendar">calendar</button> -->
                         <!--            <button class="changeLayout" @click="t_sne">t_sne</button>            -->
 <!--                        <button class="changeLayout" @click="itemRect">rect</button>-->
 <!--                        <button class="changeLayout" @click="itemMap">Map</button>-->
+                        <div>
+                            <button class="changeLayout" @click="itemPiechart">pieChart</button>
+                            <svg id="pieChart"></svg>
+                        </div>
                     </div>
                     </div>
                 <div class="status-control-forth">
@@ -74,7 +78,7 @@
                 </div>
             </div>
             <div class="layout">
-                <GridAQILevel :layoutCategory="layoutCategory" :pic="this.$store.state.pic.China"></GridAQILevel>
+                <GridAQILevel ref="layout" :layoutCategory="layoutCategory" :pic="this.$store.state.pic.China"></GridAQILevel>
             </div>
         </div>
         <div class="right">
@@ -110,7 +114,7 @@
                 grid,
                 renderCanvas: false,
                 value: 0,
-                layoutCategory: 'grid',
+                layoutCategory: 'init',
                 province:' ',
                 DateRange: {
                     StartDate: '2013-01',
@@ -124,6 +128,9 @@
                 let category = e.currentTarget.dataset['name'];
                 console.log(category)
                 this.layoutCategory = category;
+            },
+            itemPiechart(){
+              this.$refs.layout.itemPieChart()
             },
             getStartDate(date){
                 console.log(date)
