@@ -187,17 +187,18 @@
                         let gridId = '#grid'+item["data"]["index"]
 
 
-
+                        let tmpWidth = item.x1-item.x0-1;
+                        let tmpHeight = item.y1-item.y0-1;
 
                         let imgSize = d3.min([(item.x1-item.x0),(item.y1-item.y0)])
                         // console.log($(imgId))
                         $(imgId).attr("width",imgSize)
                         $(imgId).attr("height",imgSize)
                         $(gridId).attr("fill",color(item.parent.data.name))
-                        $(gridId).attr("width",imgSize+1)
-                        $(gridId).attr("height",imgSize+1)
-                        $(imgId).css("border","solid")
-                        $(imgId).css("border-color","black")
+                        $(gridId).attr("width",tmpWidth)
+                        $(gridId).attr("height",tmpHeight)
+                        $(gridId).css("border","solid")
+                        $(gridId).css("border-color","black")
                     })
                 }
 
@@ -415,18 +416,18 @@
                 if(this.layoutCategory!=='tree'){
                     d3.selectAll(".treeLayoutG")
                         .remove();
+                    d3.selectAll(".map")
+                        .attr("width",this.$store.state.itemSize)
+                        .attr("height",this.$store.state.itemSize);
+                    d3.selectAll(".mapImg")
+                        .attr("width",this.$store.state.itemSize)
+                        .attr("height",this.$store.state.itemSize);
                 }
                 if(this.layoutCategory!=='calendar'){
                     d3.selectAll(".calendarG")
                         .remove();
                 }
 
-                d3.selectAll(".map")
-                    .attr("width",this.$store.state.itemSize)
-                    .attr("height",this.$store.state.itemSize);
-                d3.selectAll(".mapImg")
-                    .attr("width",this.$store.state.itemSize)
-                    .attr("height",this.$store.state.itemSize);
             },
             barChartLayout(data,width,height){
                 let y = data["type"]
