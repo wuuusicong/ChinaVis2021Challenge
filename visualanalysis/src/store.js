@@ -7,9 +7,10 @@ const pic = {}
 
 
 import DateImg from '@/assets/AQIImg.json'
-import eventData from '@/assets/eventData.json'
+import eventDataAll from '@/assets/eventData_type.json'
+import AQIImg from '@/assets/AQIImg.json'
 console.log("event")
-
+let eventData =eventDataAll["event"]
 for(let key in eventData){
   eventData[key]["select"] = 0;
 }
@@ -23,7 +24,7 @@ provinceFolder.forEach((item1,index)=>{
   console.log(route)
   let contexts = require.context('@/assets/heatMapData/China/', true, /\.png$/);
   contexts.keys().forEach((item, index) => {
-    if(index>500)return
+    // if(index>500)return
     pic[item1][index] = {}
     pic[[item1]][index]["src"] = contexts(item);
     pic[[item1]][index]["id"] = 'grid' + index
@@ -37,6 +38,7 @@ provinceFolder.forEach((item1,index)=>{
   });
 })
 
+let dateArray = AQIImg.map((item,index)=> item.split(".")[0])
 
 
 export default new Vuex.Store({
@@ -44,8 +46,10 @@ export default new Vuex.Store({
     count: 0,
     pic,
     itemSize:18,
-    eventData,
-    opacityGroup
+    eventData:eventData,
+    barData:eventDataAll["barChat"],
+    opacityGroup,
+    dateArray
   },
   mutations: {
     increment(state) {

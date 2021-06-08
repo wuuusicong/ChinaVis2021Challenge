@@ -17,6 +17,10 @@
                 <img :src="tree" alt=""  width="190">
                 <span class="layout-name">t-sne</span>
             </div>
+            <div class="main-layout-nav" @click="changeLayout" data-name="bar">
+                <img :src="tree" alt=""  width="190">
+                <span class="layout-name">bar</span>
+            </div>
         </div>
         <div class="main">
             <div class="status-control">
@@ -331,7 +335,7 @@
         height: 15vh;
         border-bottom: 1px solid #ddd;
         /*background-color: rgb(250, 250, 250);*/
-        background-color: #1f1f1f);
+        background-color: #1f1f1f;
     }
 
     .status-control-first {

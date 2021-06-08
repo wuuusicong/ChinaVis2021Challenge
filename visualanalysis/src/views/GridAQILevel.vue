@@ -67,6 +67,8 @@
                     this.calendar()
                 }else if(newV =='t-sne'){
                     this.t_sne()
+                }else if(newV =='bar'){
+                    this.barLayout()
                 }
             }
         },
@@ -126,13 +128,16 @@
                 .attr("transform", d => `translate(${d.x0},${d.y0})`);
                 node2
                 .append("rect")
-                .attr("fill", d => 'white')
+                // .attr("fill", d => 'white')
+                .attr("stroke", d => 'white')
                 .attr("width", d => d.x1 - d.x0)
                 .attr("height", d => d.y1 - d.y0);
                 node2.append("text")
                     .attr("class",".node2Text")
                     .attr("dy",15)
-                    .text(d => d.data.name);
+                    .text(d => d.data.name)
+                    .attr("fill","white")
+                    .attr("font-size",10);
                 // tree.children.forEach((item,index)=>{
                 //     let itemID = 'GridNode'+index
                 //     let node2Svg = $("<svg class='map2'></svg>")
@@ -190,7 +195,7 @@
                         let tmpWidth = item.x1-item.x0-1;
                         let tmpHeight = item.y1-item.y0-1;
 
-                        let imgSize = d3.min([(item.x1-item.x0),(item.y1-item.y0)])
+                        let imgSize = d3.min([(item.x1-item.x0),(item.y1-item.y0)]) -2
                         // console.log($(imgId))
                         $(imgId).attr("width",imgSize)
                         $(imgId).attr("height",imgSize)
@@ -198,7 +203,8 @@
                         $(gridId).attr("width",tmpWidth)
                         $(gridId).attr("height",tmpHeight)
                         $(gridId).css("border","solid")
-                        $(gridId).css("border-color","black")
+                        $(gridId).css("border-width",1)
+                        $(gridId).css("border-color","white")
                     })
                 }
 
@@ -282,6 +288,65 @@
                 let timeData = await d3.json("timeAllJson.json")
                 let calendarPos = this.calendarLayout(timeData)
                 this.upDateLayout(calendarPos)
+            },
+            barLayout: async function(){
+                let data = this.$store.state.barData
+                const svg = d3.select("#mainSvg");
+                let width = this.gridWidth;
+                let height = this.gridHeight;
+                let margin = ({top: 20, right: 0, bottom: 10, left: 40})
+                let x = d3.scaleBand()
+                    .domain(data.map(d => d.name))
+                    .range([margin.left, width - margin.right])
+                    .padding(0.1);
+                let y = d3.scaleLinear()
+                    .domain([0, d3.max(data, d => d.value)]).nice()
+                    .range([height - margin.bottom, margin.top]);
+                let y2 = d3.scaleLinear()
+                    .domain([0, d3.max(data, d => d.value)]).nice()
+                    .range([ margin.top,height - margin.bottom]);
+                // yAxis = g => g
+                //     .attr("transform", `translate(${margin.left},0)`)
+                //     .call(d3.axisLeft(y))
+                //     .call(g => g.select(".domain").remove())
+
+                const bar = svg.append("g")
+                    .attr("fill", "steelblue")
+                    .selectAll("rect")
+                    .data(data)
+                    .join("rect")
+                    .style("mix-blend-mode", "multiply")
+                    .attr("x", d => x(d.name))
+                    .attr("y", d => y(d.value))
+                    .attr("height", d => y(0) - y(d.value))
+                    .attr("width", 40);
+
+
+                let eventData = this.eventData;
+                for (let item in eventData){
+                    const name = eventData[item]["type"];
+                    console.log()
+                }
+                let polu = {}
+                data.forEach((item,index)=>polu[item["name"]]=item["value"])
+                // let polu = {'PM2.5':0, 'PM10':0, 'CO':0, 'O3':0, 'NO2':0};
+                let gridPos = this.$store.state.dateArray.map((item,index)=>{
+                    let tmp = [];
+                    let type = eventData[item]["type"]
+
+                    tmp[0] = x(type)+this.itemSize*(polu[type]%20);
+
+                    tmp[1] =y2(polu[type])-this.itemSize;
+
+                    polu[type]-=1
+                    return tmp
+                })
+                this.upDateLayout(gridPos)
+                // const gx = svg.append("g")
+                //     .call(xAxis);
+
+                // const gy = svg.append("g")
+                //     .call(yAxis);
             },
 
             itemRect: function () {
@@ -378,7 +443,7 @@
                   .attr('transform', 'translate( 5, 5 )');
               let radius = this.itemSize*0.8/3;
               let arc = d3.arc()
-                    .innerRadius(10)
+                    .innerRadius(8)
                     // .outerRadius(radius)
                     .cornerRadius(5);
                 let drawData = d3
@@ -418,7 +483,8 @@
                         .remove();
                     d3.selectAll(".map")
                         .attr("width",this.$store.state.itemSize)
-                        .attr("height",this.$store.state.itemSize);
+                        .attr("height",this.$store.state.itemSize)
+                        .attr("border","none");
                     d3.selectAll(".mapImg")
                         .attr("width",this.$store.state.itemSize)
                         .attr("height",this.$store.state.itemSize);
@@ -523,7 +589,6 @@
 
         },
             mounted() {
-
             this.grid()
 
         },
@@ -557,9 +622,9 @@
         position: absolute;
     }
 
-    /*.sm-trans-move{*/
-    /*    transition: transform 2s,width 2s, height 2s ;*/
-    /*}*/
+    .sm-trans-move{
+        transition: transform 2s ;
+    }
     /*.sm-trans-active, .sm-trans-active {*/
     /*    transition: all 1s;*/
     /*}*/
@@ -614,9 +679,12 @@
         line-height: 145px;
         text-align: center;
     }
-    .mapImg,.map{
-        transition: width 2s, height 2s, transform 2s;
+    /*.mapImg,.map{*/
+    /*    transition: width 2s, height 2s, transform 2s;*/
 
+    /*}*/
+    .mapImg{
+        margin: auto;
     }
 
 </style>
