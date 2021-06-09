@@ -3,10 +3,10 @@
         <div class="news_list">
             <ul v-for="item in loadReportData(province_name, dateRange, pollution_item)" :key="item.id" class="news">
                 <li  class="news_title"><a :href="item.url" target="_blank">{{item.title}}</a></li>
-                <li>来源： {{item.source}}</li>
-                <li>位置： {{item.province+(item.city == 'None'?'':item.city)}}</li>
-                <li>日期： {{item.date}}</li>
-                <li>关键词： {{item.key1}},{{item.key2}},{{item.key3}}</li>
+                <li class="report_cotent">来源： {{item.source}}</li>
+                <li class="report_cotent">位置： {{item.province+(item.city == 'None'?'':item.city)}}</li>
+                <li class="report_cotent">日期： {{item.date}}</li>
+                <li class="report_cotent">关键词： {{item.key1}},{{item.key2}},{{item.key3}}</li>
             </ul>
         </div>
     </div>
@@ -116,8 +116,8 @@
         height: 200px;
         /*background-color: rgba(212, 211, 198, 0.5);*/
         background-color: rgba(35, 34, 24, 0.5);
-        -moz-box-shadow: 10px 10px 5px #888888; /* 老的 Firefox */
-        box-shadow: 10px 10px 5px #888888;
+        -moz-box-shadow: 10px 10px 5px rgba(255, 242, 204, 0.3); /* 老的 Firefox */
+        box-shadow: 10px 10px 5px rgba(255, 242, 204, 0.4);
         background-repeat: no-repeat;
         background-size: 1px 24px, 24px 1px;
         padding-inline-start: 0;
@@ -145,11 +145,15 @@
 
     .news_title a{
         /*text-decoration:none;*/
-        color: #f60707;
+        color: #FFF2CC;;
         /*font-weight: bold;*/
     }
 
     .news_title a:hover{
         text-decoration:underline;
+    }
+
+    .report_cotent{
+        color: gold;
     }
 </style>
