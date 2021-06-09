@@ -151,12 +151,12 @@
                 renderCanvas: false,
                 value: 0,
                 layoutCategory: 'init',
-                province:'China',
+                province:' ',
                 DateRange: {
                     StartDate: '2013-01',
                     EndDate: '2019-01'
                 },
-                Pollution_Item: 'pm2.5',
+                Pollution_Item: ' ',
 // <<<<<<< HEAD
 //                 pic:this.$store.state.pic,
 //                 picItem:this.$store.state.pic["China"],
