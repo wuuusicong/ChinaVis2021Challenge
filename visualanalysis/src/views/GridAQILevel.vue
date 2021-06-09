@@ -410,9 +410,9 @@
                 let data = await d3.json("PieChartData.json")
                 console.log("pieChartData")
                 console.log(data)
-                d3.select("#pieChart")
-                .attr("width",150)
-                .attr("height",50)
+                // d3.select("#pieChart")
+                // .attr("width",150)
+                // .attr("height",50)
                 let legendData = data[0]["AQI"]
                 let colorScale = d3
                     .scaleOrdinal()

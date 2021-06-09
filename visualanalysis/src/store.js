@@ -22,7 +22,7 @@ provinceFolder.forEach((item1,index)=>{
   let route = '@/assets/heatMapData/China/'
   let contexts = require.context('@/assets/heatMapData/China/', true, /\.png$/);
   contexts.keys().forEach((item, index) => {
-    // if(index>500)return
+    if(index>500)return
     pic[item1][index] = {}
     pic[[item1]][index]["src"] = contexts(item);
     pic[[item1]][index]["id"] = 'grid' + index
