@@ -56,7 +56,7 @@
     import AQI_img from '@/assets/AQIImg.json'
     export default {
         name: "GridAQILevel",
-        props: ['layoutCategory','pic'],
+        props: ['layoutCategory','pic','eventList'],
         watch: {
             layoutCategory(newV){
                 if(newV == 'tree'){
@@ -70,6 +70,17 @@
                 }else if(newV =='bar'){
                     this.barLayout()
                 }
+            },
+            eventList:{
+                handler(newV) {
+                    let eventName = Object.getOwnPropertyNames(newV);
+                    let checkedEventName = eventName.filter(name => {      
+                        return newV[name] == true;
+                    })
+                    console.log(checkedEventName)
+                    this.springFestival(checkedEventName);
+                },
+                deep: true
             }
         },
         methods: {
@@ -257,8 +268,7 @@
                 }
                 return calendarPos
             },
-            grid() {
-                console.log(this.pic)
+            grid() {                
                 // this.gridWidth = this.$refs.layout.offsetWidth;
                 // this.gridHeight = this.$refs.layout.offsetHeight;
                 this.gridWidth = 1453;
@@ -269,8 +279,7 @@
                 data.forEach((item) => {
                     let srcTmp = item
                     this.position.push(srcTmp)
-                })
-                console.log('dd')
+                })                
                 let itemSize = this.itemSize
                 let gridPos = this.gridLayout(data.length, itemSize, this.gridWidth, this.gridHeight)
                 this.upDateLayout(gridPos);
@@ -588,18 +597,39 @@
                 // console.log(this.currentOpacity)
                 this.opacityShow()
             },
-            springFestival(event,eventType){
+            springFestival(checkedEvent){
+                let eventType;
                 // let event = "Spring Festival";
-                if(event ==="SF"){
-                    event = "Spring Festival";
-                }
-                console.log(event);
-                this.currentOpacity = this.currentOpacity.map((item,index)=>{
-                    if(this.eventData[item["date"]][eventType][event]===1){
+
+                let tmpOpacity = []                
+
+                tmpOpacity = this.currentOpacity.map((item)=>{
+                    let itemChecked = false;
+
+                    checkedEvent.forEach(event=>{
+                        if(event ==="SF"){
+                            event = "Spring Festival";
+                            eventType = 'eventHoliday';
+                        }else if (event === "NPC"){
+                            eventType = 'eventHoliday';
+                        }
+                        else{
+                            eventType = 'eventSeason';
+                        }
+                        let tmp = this.eventData[item["date"]][eventType][event];
+                        if(tmp === 1){
+                            itemChecked = true;
+                        }
+                    })
+
+                    if(itemChecked){
                         return {...item,opacity:1}
-                    }else return {...item,opacity: 0.2}
+                    }else {
+                        return {...item,opacity: 0.2}
+                    }
                 })
 
+                this.currentOpacity = tmpOpacity
                 console.log(this.currentOpacity)
                 this.opacityShow();
             },

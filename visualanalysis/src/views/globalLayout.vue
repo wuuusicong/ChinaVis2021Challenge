@@ -90,13 +90,13 @@
                     <div>
                         event
                     </div>
-                    <ul class="event-list" @click="getPollutionItem">
-                        <li class="event-item" data-item="SF"><input id="SF" type="radio" name="event-item" data-item="SF"> <label for="SF">Spring Festival</label><button>-></button></li>
-                        <li class="event-item" data-item="NPC"><input id="NPC" type="radio" name="event-item" data-item="NPC"> <label for="NPC">NPC</label><button>-></button></li>
-                        <li class="event-item" data-item="Spring"><input id="Spring" type="radio" name="event-item" data-item="Spring"> <label for="Spring">Spring</label></li>
-                        <li class="event-item" data-item="Summer"><input id="Summer" type="radio" name="event-item" data-item="Summer"> <label for="Summer">Summer</label></li>
-                        <li class="event-item" data-item="Autumn"><input id="Autumn" type="radio" name="event-item" data-item="Autumn"> <label for="Autumn">Autumn</label></li>
-                        <li class="event-item" data-item="Winter"><input id="Winter" type="radio" name="event-item" data-item="Winter"> <label for="Winter">Winter</label></li>
+                    <ul class="event-list">
+                        <li class="event-item" data-item="SF"><input v-model="eventList.SF" id="SF" type="checkbox" name="event-item" data-item="SF"> <label for="SF">Spring Festival</label></li>
+                        <li class="event-item" data-item="NPC"><input v-model="eventList.NPC" id="NPC" type="checkbox" name="event-item" data-item="NPC"> <label for="NPC">NPC</label></li>
+                        <li class="event-item" data-item="Spring"><input v-model="eventList.spring" id="Spring" type="checkbox" name="event-item" data-item="Spring"> <label for="Spring">Spring</label></li>
+                        <li class="event-item" data-item="Summer"><input v-model="eventList.summer" id="Summer" type="checkbox" name="event-item" data-item="Summer"> <label for="Summer">Summer</label></li>
+                        <li class="event-item" data-item="Autumn"><input v-model="eventList.autumn" id="Autumn" type="checkbox" name="event-item" data-item="Autumn"> <label for="Autumn">Autumn</label></li>
+                        <li class="event-item" data-item="Winter"><input v-model="eventList.winter" id="Winter" type="checkbox" name="event-item" data-item="Winter"> <label for="Winter">Winter</label></li>
 <!--                        <li class="pollution-item" data-item="pm10"><input id="pm10" type="radio" name="pollution-item" data-item="pm10"> <label for="pm10">pm10</label></li>-->
 <!--                        <li class="pollution-item" data-item="CO2"><input id="CO2" type="radio" name="pollution-item" data-item="CO2"> <label for="CO2">CO2</label></li>-->
 <!--                        <li class="pollution-item" data-item="SO2"><input id="SO2" type="radio" name="pollution-item" data-item="SO2"> <label for="SO2">SO2</label></li>-->
@@ -107,7 +107,7 @@
                 </div>
             </div>
             <div class="layout">
-                <GridAQILevel ref="layout" :layoutCategory="layoutCategory" :pic="picItem"></GridAQILevel>
+                <GridAQILevel ref="layout" :eventList="eventList" :layoutCategory="layoutCategory" :pic="pic"></GridAQILevel>
             </div>
         </div>
         <div class="right">
@@ -139,7 +139,6 @@
             Rating,
             Report
         },
-
         data() {
             return {
                 tree,
@@ -156,8 +155,20 @@
                     EndDate: '2019-01'
                 },
                 Pollution_Item: ' ',
-                pic:this.$store.state.pic,
-                picItem:this.$store.state.pic["China"]
+// <<<<<<< HEAD
+//                 pic:this.$store.state.pic,
+//                 picItem:this.$store.state.pic["China"],
+// =======
+                pic:this.$store.state.pic.Hebei,
+                eventList: {
+                    SF: '',
+                    NPC: '',
+                    spring: '',
+                    summer: '',
+                    autumn: '',
+                    winter: ''
+                }
+// >>>>>>> 41ea3a6b8705ef19aaeb4d9e1005a23a48b787f2
             }
         },
         methods: {
@@ -187,25 +198,25 @@
             getPollutionItem(e){
                 if (e.target.tagName === 'LABEL') {return;}
                 let item = e.target.dataset['item']
-                console.log(item)
-                switch (item) {
-                    case 'SF':this.$refs.layout.springFestival("SF","eventHoliday");break;
-                    case 'NPC':this.$refs.layout.springFestival("NPC","eventHoliday");break;
-                    case 'Spring':this.$refs.layout.springFestival("spring","eventSeason");break;
-                    case 'Summer':this.$refs.layout.springFestival("summer","eventSeason");break;
-                    case 'Autumn':this.$refs.layout.springFestival("autumn","eventSeason");break;
-                    case 'Winter':this.$refs.layout.springFestival("winter","eventSeason");break;
-                    default: break ;
-                }
-                // if(item==='SF'){
-                //     this.$refs.layout.springFestival();
-                // }
-
-
-                setTimeout(() =>{
-                    this.Pollution_Item = item;
-                },250);
+                console.log(item)                   
             },
+            // eventChange(e){
+
+            //     if (e.target.tagName === 'LABEL') {return;}
+            //     let item = e.target.dataset['item']
+            //     switch (item) {
+            //         case 'SF':this.$refs.layout.springFestival("SF","eventHoliday");break;
+            //         case 'NPC':this.$refs.layout.springFestival("NPC","eventHoliday");break;
+            //         case 'Spring':this.$refs.layout.springFestival("spring","eventSeason");break;
+            //         case 'Summer':this.$refs.layout.springFestival("summer","eventSeason");break;
+            //         case 'Autumn':this.$refs.layout.springFestival("autumn","eventSeason");break;
+            //         case 'Winter':this.$refs.layout.springFestival("winter","eventSeason");break;
+            //         default: break ;
+            //     }
+            //     setTimeout(() =>{
+            //         this.Pollution_Item = item;
+            //     },250);
+            // },
             drawControlMap(){
                 console.log("controlMap")
                 let that = this;
@@ -260,7 +271,7 @@
                             .attr("fill", 'yellow');
                         let provinceID = provinceName[i.properties.name]
                         console.log(that.pic)
-                        that.picItem = that.pic[provinceID];
+                        that.pic = that.$store.state.pic[provinceID];
                         console.log(that.picItem)
                     });
                 // controlSvg.selectAll(".text")
@@ -314,8 +325,7 @@
             },
 
         },
-        mounted() {
-            console.log(this.$store.state.pic)
+        mounted() {            
             this.drawControlMap()
         },
         computed: {
@@ -512,5 +522,9 @@
 }
     #controlMap{
         margin-left: 50px;
+    }
+
+    .event-list{
+        list-style: none;
     }
 </style>
