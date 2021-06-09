@@ -4,9 +4,10 @@
             max-width="290px" min-width="auto">
             <template v-slot:activator="{ on, attrs }">
                 <v-text-field v-model="dateFormatted" persistent-hint prepend-icon="mdi-calendar" v-bind="attrs"
-                     v-on="on" class="ma-0"></v-text-field>
+                     v-on="on" class="ma-0" color="white"></v-text-field>
             </template>
-            <v-date-picker v-model="date" type="month" no-title @input="menu1 = false"></v-date-picker>
+            <v-date-picker v-model="date" type="month" no-title @input="menu1 = false" color="green lighten-1"
+                           header-color="primary"></v-date-picker>
         </v-menu>
     </div>
 </template>
@@ -43,5 +44,12 @@
 <style scoped>
     .date-picker {
         width: 122px;
+        color:white;
+    }
+    .theme--light{
+        color:white;
+    }
+    .theme--light.v-input input{
+        color: white;
     }
 </style>

@@ -81,7 +81,7 @@
                 let initPos = AQI_img.map((item,index)=>initItemPos)
                 this.upDateLayout(initPos)
             },
-            gridLayout(dataNum, itemSize, width, height, padding = {
+            gridLayout(dataNum, itemSize, width=this.gridWidth, height=this.gridHeight, padding = {
                 widthGap: 10,
                 heightGap: 2
             }) {
@@ -216,7 +216,7 @@
                 widthGap: 10,
                 heightGap: 2
             }) {
-                let tmpYears = d3.groups(timeData, d => new Date(d).getUTCFullYear()).reverse()
+                let tmpYears = d3.groups(timeData, d => new Date(d).getUTCFullYear())
                 let calendarPos = []
                 let mainSvg =  d3.select("#mainSvg");
 
@@ -287,7 +287,23 @@
                 let formatDate = d3.utcFormat("%x")
                 let timeData = await d3.json("timeAllJson.json")
                 let calendarPos = this.calendarLayout(timeData)
-                this.upDateLayout(calendarPos)
+                this.upDateLayout(calendarPos);
+                // this.calendarAnimate();
+            },
+            calendarAnimate(){
+                let initId = 0
+                let grid="grid";
+                d3.selectAll(".map")
+                 .attr("opacity",0.2)
+              setInterval(function () {
+                    let id = '#'+grid+initId;
+                    let preId = '#'+grid+(initId-1);
+                  d3.select(preId)
+                      .attr("opacity",0.2);
+                    d3.select(id)
+                      .attr("opacity",1);
+                    initId+=1;
+              },10)
             },
             barLayout: async function(){
                 let data = this.$store.state.barData
@@ -330,15 +346,20 @@
                 let polu = {}
                 data.forEach((item,index)=>polu[item["name"]]=item["value"])
                 // let polu = {'PM2.5':0, 'PM10':0, 'CO':0, 'O3':0, 'NO2':0};
+                let sum=0;
                 let gridPos = this.$store.state.dateArray.map((item,index)=>{
                     let tmp = [];
                     let type = eventData[item]["type"]
 
-                    tmp[0] = x(type)+this.itemSize*(polu[type]%20);
+                    tmp[0] = x(type)+this.itemSize*(sum%20);
 
-                    tmp[1] =y2(polu[type])-this.itemSize;
-
+                    tmp[1] =y(polu[type])-this.itemSize;
+                    // if(sum===20){
+                    //     polu[type]-=1;
+                    //     sum=0;
+                    // }
                     polu[type]-=1
+                    sum+=1;
                     return tmp
                 })
                 this.upDateLayout(gridPos)
@@ -410,7 +431,6 @@
                     .attr('width', 10)
                     .attr('height', 10)
                     .attr('fill', function(d,index) {
-
                         console.log(d)
                         return colorScale(index)
                     });
@@ -527,7 +547,7 @@
                 // console.log(itemNum)
                 // console.log( e.currentTarget.dataset["dataset"])
                 this.eventData[e.currentTarget.dataset["date"]].select = 1;
-                this.springFestival()
+                // this.springFestival()
                 // this.itemStyleShow(itemID,itemNum)
             },
             showItemDate(e){
@@ -568,14 +588,18 @@
                 // console.log(this.currentOpacity)
                 this.opacityShow()
             },
-            springFestival(){
-                let event = "Spring Festival";
+            springFestival(event,eventType){
+                // let event = "Spring Festival";
+                if(event ==="SF"){
+                    event = "Spring Festival";
+                }
+                console.log(event);
                 this.currentOpacity = this.currentOpacity.map((item,index)=>{
-                    if(this.eventData[item["date"]]["eventHoliday"][event]===1){
+                    if(this.eventData[item["date"]][eventType][event]===1){
                         return {...item,opacity:1}
                     }else return {...item,opacity: 0.2}
                 })
-                console.log("spring");
+
                 console.log(this.currentOpacity)
                 this.opacityShow();
             },

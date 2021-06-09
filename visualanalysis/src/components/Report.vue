@@ -114,7 +114,8 @@
         margin: 10px auto;
         width: 210px;
         height: 200px;
-        background-color: rgba(255, 242, 0, 0.5);
+        /*background-color: rgba(212, 211, 198, 0.5);*/
+        background-color: rgba(35, 34, 24, 0.5);
         -moz-box-shadow: 10px 10px 5px #888888; /* 老的 Firefox */
         box-shadow: 10px 10px 5px #888888;
         background-repeat: no-repeat;
@@ -143,9 +144,9 @@
     }
 
     .news_title a{
-        text-decoration:none;
-        color: #000000;
-        font-weight: bold;
+        /*text-decoration:none;*/
+        color: #f60707;
+        /*font-weight: bold;*/
     }
 
     .news_title a:hover{
