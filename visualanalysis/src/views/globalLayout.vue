@@ -156,7 +156,7 @@
                     EndDate: '2019-01'
                 },
                 Pollution_Item: ' ',
-                pic:this.$store.state.pic.China
+                pic:this.$store.state.pic.Hebei
             }
         },
         methods: {
@@ -311,6 +311,7 @@
 
         },
         mounted() {
+            console.log(this.$store.state.pic)
             this.drawControlMap()
         },
         computed: {
