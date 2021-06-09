@@ -1,13 +1,11 @@
 <template>
     <div class="date-picker">
-        <v-menu ref="menu1" v-model="menu1" :close-on-content-click="false" transition="scale-transition" offset-y
-            max-width="290px" min-width="auto">
+        <v-menu ref="menu1" v-model="menu1" :close-on-content-click="false" transition="scale-transition" offset-y max-width="290px" min-width="auto" color="white">
             <template v-slot:activator="{ on, attrs }">
-                <v-text-field v-model="dateFormatted" persistent-hint prepend-icon="mdi-calendar" v-bind="attrs"
-                     v-on="on" class="ma-0" color="white"></v-text-field>
+                <v-text-field class="ma-0" dark v-model="dateFormatted" persistent-hint prepend-icon="mdi-calendar" v-bind="attrs"
+                    v-on="on"></v-text-field>
             </template>
-            <v-date-picker v-model="date" type="month" no-title @input="menu1 = false" color="green lighten-1"
-                           header-color="primary"></v-date-picker>
+            <v-date-picker v-model="date" type="month" no-title @input="menu1 = false" color="green lighten-1" header-color="primary" class="white--text"></v-date-picker>
         </v-menu>
     </div>
 </template>
@@ -23,14 +21,14 @@
         watch: {
             date(val) {
                 this.dateFormatted = this.formatDate(this.date)
-                this.$emit('dateChange',val);
+                this.$emit('dateChange', val);
             },
         },
         methods: {
             formatDate(date) {
                 if (!date) return null
 
-                const [year, month, day] = date.split('-')                
+                const [year, month, day] = date.split('-')
                 return `${month}/${year}`
             },
             parseDate(date) {
@@ -43,13 +41,15 @@
 </script>
 <style scoped>
     .date-picker {
-        width: 122px;
-        color:white;
+        width: 100px;
+        color: white;
     }
-    .theme--light{
-        color:white;
+
+    .theme--light {
+        color: white;
     }
-    .theme--light.v-input input{
+
+    .theme--light.v-input input {
         color: white;
     }
 </style>
