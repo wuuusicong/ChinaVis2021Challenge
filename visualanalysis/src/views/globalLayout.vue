@@ -107,7 +107,7 @@
                 </div>
             </div>
             <div class="layout">
-                <GridAQILevel ref="layout" :layoutCategory="layoutCategory" :pic="pic"></GridAQILevel>
+                <GridAQILevel ref="layout" :layoutCategory="layoutCategory" :pic="picItem"></GridAQILevel>
             </div>
         </div>
         <div class="right">
@@ -150,13 +150,14 @@
                 renderCanvas: false,
                 value: 0,
                 layoutCategory: 'init',
-                province:' ',
+                province:'China',
                 DateRange: {
                     StartDate: '2013-01',
                     EndDate: '2019-01'
                 },
                 Pollution_Item: ' ',
-                pic:this.$store.state.pic.China
+                pic:this.$store.state.pic,
+                picItem:this.$store.state.pic["China"]
             }
         },
         methods: {
@@ -253,11 +254,14 @@
                         $("#tooltip").css("opacity",0.0);
                     })
                     .on("click",function (d,i) {
+                        const provinceName = {"北京市":"Beijing","河北省":"Hebei","天津市":"Tianjing"}
                         province.attr("fill","#272823")
                         d3.select(this)
                             .attr("fill", 'yellow');
-                        that.province = i.properties.name
-                        console.log(that.province)
+                        let provinceID = provinceName[i.properties.name]
+                        console.log(that.pic)
+                        that.picItem = that.pic[provinceID];
+                        console.log(that.picItem)
                     });
                 // controlSvg.selectAll(".text")
                 //     .data(map_Data.features)
@@ -311,6 +315,7 @@
 
         },
         mounted() {
+            console.log(this.$store.state.pic)
             this.drawControlMap()
         },
         computed: {
