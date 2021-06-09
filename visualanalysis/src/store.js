@@ -53,7 +53,7 @@ contexts.keys().forEach((item) => {
     provinceFolder[province]++;
   }
   let index = provinceFolder[province];
-  // if(index>500)return
+  if(index>1)return
   pic[province][index] = {}
   pic[province][index]["src"] = contexts(item);
   pic[province][index]["id"] = 'grid' + index

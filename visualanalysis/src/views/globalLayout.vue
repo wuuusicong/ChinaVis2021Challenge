@@ -156,12 +156,12 @@
                     StartDate: '2013-01',
                     EndDate: '2019-01'
                 },
-                Pollution_Item: ' ',
+                Pollution_Item: 'pm2.5',
 // <<<<<<< HEAD
 //                 pic:this.$store.state.pic,
 //                 picItem:this.$store.state.pic["China"],
 // =======
-                pic:this.$store.state.pic.Hebei,
+                pic:this.$store.state.pic.China,
                 eventList: {
                     SF: '',
                     NPC: '',
@@ -202,23 +202,23 @@
                 let item = e.target.dataset['item']
                 console.log(item)                   
             },
-            // eventChange(e){
+            eventChange(e){
 
-            //     if (e.target.tagName === 'LABEL') {return;}
-            //     let item = e.target.dataset['item']
-            //     switch (item) {
-            //         case 'SF':this.$refs.layout.springFestival("SF","eventHoliday");break;
-            //         case 'NPC':this.$refs.layout.springFestival("NPC","eventHoliday");break;
-            //         case 'Spring':this.$refs.layout.springFestival("spring","eventSeason");break;
-            //         case 'Summer':this.$refs.layout.springFestival("summer","eventSeason");break;
-            //         case 'Autumn':this.$refs.layout.springFestival("autumn","eventSeason");break;
-            //         case 'Winter':this.$refs.layout.springFestival("winter","eventSeason");break;
-            //         default: break ;
-            //     }
-            //     setTimeout(() =>{
-            //         this.Pollution_Item = item;
-            //     },250);
-            // },
+                // if (e.target.tagName === 'LABEL') {return;}
+                // let item = e.target.dataset['item']
+                // switch (item) {
+                //     case 'SF':this.$refs.layout.springFestival("SF","eventHoliday");break;
+                //     case 'NPC':this.$refs.layout.springFestival("NPC","eventHoliday");break;
+                //     case 'Spring':this.$refs.layout.springFestival("spring","eventSeason");break;
+                //     case 'Summer':this.$refs.layout.springFestival("summer","eventSeason");break;
+                //     case 'Autumn':this.$refs.layout.springFestival("autumn","eventSeason");break;
+                //     case 'Winter':this.$refs.layout.springFestival("winter","eventSeason");break;
+                //     default: break ;
+                // }
+                // setTimeout(() =>{
+                //     this.Pollution_Item = item;
+                // },250);
+            },
             drawControlMap(){
                 console.log("controlMap")
                 let that = this;
@@ -235,7 +235,7 @@
 
                 const path = d3.geoPath().projection(projection)
 
-                let province = controlSvg.selectAll('.gMap')
+                let provinceMap = controlSvg.selectAll('.gMap')
                     .data(map_Data.features)
                     .enter()
                     .append("g")
@@ -245,7 +245,7 @@
                     .attr("stroke","white")
                     .attr('stroke-width', 1)
                     .attr('opacity', 0.6);
-                province.on("mousemove",function(d,i){
+                provinceMap.on("mousemove",function(d,i){
                         // console.log( d3.select(this))
                         // d3.select(this)
                         //     .attr("fill", "yellow");
@@ -268,7 +268,7 @@
                     })
                     .on("click",function (d,i) {
                         const provinceName = {"北京市":"Beijing","河北省":"Hebei","天津市":"Tianjing"}
-                        province.attr("fill","#272823")
+                        provinceMap.attr("fill","#272823")
                         d3.select(this)
                             .attr("fill", 'yellow');
                         let provinceID = provinceName[i.properties.name]
