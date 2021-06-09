@@ -87,19 +87,21 @@
                     </div>
                     </div>
                 <div class="status-control-forth">
-                    <div>
-                        event
-                    </div>
                     <ul class="event-list">
-                        <li class="event-item" data-item="SF"><input v-model="eventList.SF" id="SF" type="checkbox" name="event-item" data-item="SF"> <label for="SF">Spring Festival</label></li>
-                        <li class="event-item" data-item="NPC"><input v-model="eventList.NPC" id="NPC" type="checkbox" name="event-item" data-item="NPC"> <label for="NPC">NPC</label></li>
+                        <div class="event-category">
+                            season:
+                        </div>
                         <li class="event-item" data-item="Spring"><input v-model="eventList.spring" id="Spring" type="checkbox" name="event-item" data-item="Spring"> <label for="Spring">Spring</label></li>
                         <li class="event-item" data-item="Summer"><input v-model="eventList.summer" id="Summer" type="checkbox" name="event-item" data-item="Summer"> <label for="Summer">Summer</label></li>
                         <li class="event-item" data-item="Autumn"><input v-model="eventList.autumn" id="Autumn" type="checkbox" name="event-item" data-item="Autumn"> <label for="Autumn">Autumn</label></li>
                         <li class="event-item" data-item="Winter"><input v-model="eventList.winter" id="Winter" type="checkbox" name="event-item" data-item="Winter"> <label for="Winter">Winter</label></li>
-<!--                        <li class="pollution-item" data-item="pm10"><input id="pm10" type="radio" name="pollution-item" data-item="pm10"> <label for="pm10">pm10</label></li>-->
-<!--                        <li class="pollution-item" data-item="CO2"><input id="CO2" type="radio" name="pollution-item" data-item="CO2"> <label for="CO2">CO2</label></li>-->
-<!--                        <li class="pollution-item" data-item="SO2"><input id="SO2" type="radio" name="pollution-item" data-item="SO2"> <label for="SO2">SO2</label></li>-->
+                    </ul>
+                    <ul class="event-list">
+                        <div class="event-category">
+                            event:
+                        </div>
+                        <li class="event-item" data-item="SF"><input v-model="eventList.SF" id="SF" type="checkbox" name="event-item" data-item="SF"> <label for="SF">Spring Festival</label></li>
+                        <li class="event-item" data-item="NPC"><input v-model="eventList.NPC" id="NPC" type="checkbox" name="event-item" data-item="NPC"> <label for="NPC">NPC</label></li>                        
                     </ul>
                 </div>
                 <div class="status-control-third">
@@ -512,19 +514,23 @@
     .containerItemInline{
         display: inline-block;
     }
-.itemInlineAll{
-    margin-top: 20px;
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
+    .itemInlineAll{
+        margin-top: 20px;
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
 
-    width: 80%;
-}
+        width: 80%;
+    }
     #controlMap{
         margin-left: 50px;
     }
 
     .event-list{
+        margin-top: 8px;
+        padding: 0px 20px;
+        float: left;
         list-style: none;
-    }
+    }    
+
 </style>
